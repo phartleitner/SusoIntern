@@ -2,6 +2,10 @@
 
 /**
  * class handles input and other data
+ * from here all action will be started
+ * all data sent via POST , GET or REQUEST will be read, analyzed and further proceedings started
+ * at the end of any action there is usually a template to be called or 
+ * the programm dies (when a call to this script has been issued via the browsers javascript)
  */
 class Controller {
     

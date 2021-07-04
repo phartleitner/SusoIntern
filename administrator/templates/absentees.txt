@@ -1,0 +1,64 @@
+<p style="font-size: 19px;font-weight:bold">Mittwoch,  13.02.2019</p>
+<table>
+<tbody>
+<tr>
+<td><span style="font-size: 16px;font-weight:bold">07a</span><br>
+<span style="font-size:12px">Becker, Laurenz</span><br/>
+</td>
+<td><span style="font-size: 16px;font-weight:bold">07d</span><br>
+<span style="font-size:12px">Bartels, Benedict</span><br/>
+</td>
+</tr>
+</tbody></table>
+<hr>
+<p style="font-size: 19px;font-weight:bold">Donnerstag,  14.02.2019</p>
+<table>
+<tbody>
+<tr>
+<td><span style="font-size: 16px;font-weight:bold">07a</span><br>
+<span style="font-size:12px">Becker, Laurenz</span><br/>
+</td>
+<td><span style="font-size: 16px;font-weight:bold">07d</span><br>
+<span style="font-size:12px">Bartels, Benedict</span><br/>
+</td>
+<td><span style="font-size: 16px;font-weight:bold">11</span><br>
+<span style="font-size:12px">Bohnet Millan, Daniel</span><br/>
+</td>
+</tr>
+</tbody></table>
+<hr>
+<p style="font-size: 19px;font-weight:bold">Freitag,  15.02.2019</p>
+<table>
+<tbody>
+<tr>
+<td><span style="font-size: 16px;font-weight:bold">07a</span><br>
+<span style="font-size:12px">Becker, Laurenz</span><br/>
+</td>
+<td><span style="font-size: 16px;font-weight:bold">07d</span><br>
+<span style="font-size:12px">Bartels, Benedict</span><br/>
+</td>
+<td><span style="font-size: 16px;font-weight:bold">11</span><br>
+<span style="font-size:12px">Bohnet Millan, Daniel</span><br/>
+</td>
+</tr>
+<tr>
+<td><span style="font-size: 16px;font-weight:bold">12</span><br>
+<span style="font-size:12px">Franke, Magdalena</span><br/>
+<span style="font-size:12px">Heines, Viva</span><br/>
+</td>
+</tr>
+</tbody></table>
+<hr>
+<p style="font-size: 19px;font-weight:bold">Montag,  18.02.2019</p>
+<table>
+<tbody>
+<tr>
+<td><span style="font-size: 16px;font-weight:bold">09a</span><br>
+<span style="font-size:12px">Tanke, Ariane<b style="font-size:8px">&nbsp;[beurl.]</b></span><br/>
+</td>
+<td><span style="font-size: 16px;font-weight:bold">12</span><br>
+<span style="font-size:12px">Schaden, Johanna</span><br/>
+</td>
+</tr>
+</tbody></table>
+<hr>

@@ -1,0 +1,156 @@
+<?php namespace administrator;
+    include("header.php");
+    $data = \View::getInstance()->getDataForView();
+?>
+<div class="container">
+<div class="row">
+	<div class="col s12  ">
+		<div class="card">
+			<div class="card-content">
+			  <span class="card-title">
+				<?php if (!isset($data["backButton"])) { ?>
+					<a id="backButton" class="mdl-navigation__link waves-effect waves-light teal-text"
+					   href="<?php echo $data["backButton"]; ?>"><i
+								class="material-icons">chevron_left</i></a>
+				<?php } ?>
+				  <?php echo \View::getInstance()->getTitle(); ?>
+			  </span>
+			  <br>
+			  <div>
+				<table>
+					<tr>
+						<td class="input-field ">	
+							<i class="material-icons prefix">search</i>
+							<input type="text" id="pupil-input" name="name"></input>
+							<label for="autocomplete-input" class="truncate">Nachname</label>
+						</td>	
+					</tr>	
+				</table>
+				</div>
+				<div id="pupils"></div>
+			</div>
+			
+
+		</div>
+		
+	</div>
+	<div id="pupildata" class="col s12 l6 m6 " style="display:none;">
+		<div class="card">
+			<div class="card-content">
+			  <span id="title" class="card-title">
+			  </span>
+			  <div id="dob">
+			  
+				</div>
+			  <div id="pupil-reg">
+			  <table>
+					<tr>
+						
+						<td></td>	
+					</tr>	
+				</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+
+<!-- Include Javascript -->
+<?php include("js.php") ?>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
+<script type="application/javascript">
+var xhttp = new XMLHttpRequest();
+var content = "";
+var data;
+var pupilInfoDivs = [];
+var activeInfoDiv = null;
+xhttp.addEventListener('load', function(event) {
+	content = "";
+	
+	if (this.responseText) {
+		data = $.parseJSON(this.responseText);
+		list = createResultList(data);
+		//console.log(list);
+	} 
+	$('#pupils').html(list);
+} );
+
+//Trigger the jquery keyup function
+$("input[id=pupil-input]").keyup(function(){
+	$('#pupils').html('');
+	partname = $("input[id=pupil-input]").val();
+	if (partname.length > 0) {
+	//send request to webserver
+	xhttp.open("POST", "?type=pupilmgt&console&partname="+partname, true);
+	xhttp.send();
+	}
+	
+});
+
+
+function createResultList(data){
+x = 0;
+content = "";
+data.forEach(function(element) {
+		
+		content += '<div id="p'+element['id']+'"> '+
+		'<a href="#" onClick="showDetails('+x+')" class="navigation waves-effect waves-light teal-text">'
+		+element['name']+', ' 
+		+ element['vorname'] + '( '
+		+ element['klasse'] 
+		+')</a>'
+		+'<div id="'+element['name']+'"></div></div>';
+		
+		x++;
+		});	
+	return content;
+}
+
+function showDetails(elementNr) {
+//delete activeDivvs
+/*
+if (pupilInfoDivs.length > 0) {
+pupilInfoDivs.forEach(function(infoDiv){
+document.getElementById(infoDiv['id']).remove();
+});	*/
+if (null != activeInfoDiv) activeInfoDiv.remove();
+
+
+	
+//create info Div
+new infoDiv(elementNr)
+
+/*
+$('#pupildata').show();	
+
+$('#title').html(data[element]['name']+', '+data[element]['vorname']+' ('+data[element]['klasse']+')');
+$('#dob').html("Geburtsdatum: " +data[element]['dob']);
+$('#pupil-reg').html("ASV-ID: "+data[element]['asvId']);
+*/
+}
+
+function infoDiv(elementNr){
+this.parentDiv = 'p'+data[elementNr]['id'];
+this.infoDiv = document.createElement("div");
+this.infoDiv.id = 'info'+data[elementNr]['id'];
+this.infoDiv.className += "teal lighten-5 black-text ";
+document.getElementById(this.parentDiv).appendChild(this.infoDiv);
+this.dob = document.createElement("p");
+this.dob.innerHTML = "Geburtsdatum: " +data[elementNr]['dob'];
+this.asvId = document.createElement("p");
+this.asvId.innerHTML = "ASV-ID: "+data[elementNr]['asvId'];
+this.eId = document.createElement("p");
+this.eId.innerHTML = "Eltern: "+data[elementNr]['eid'];
+this.infoDiv.appendChild(this.dob);
+this.infoDiv.appendChild(this.asvId);
+this.infoDiv.appendChild(this.eId);
+
+activeInfoDiv = this.infoDiv;	
+}
+
+</script>
+</body>
+</html>

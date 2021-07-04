@@ -1,0 +1,297 @@
+
+---------------------------------------------------------------------------
+message sent from administrator\Controller::checkTeacherAssignments
+/download/teacherassignments.csv - 20181230 14:03:07
+---------------------------------------------------------------------------
+message sent from administrator\Controller::checkTeacherAssignments
+/var/www/vhosts/suso.schulen.konstanz.de/httpdocs/intern//download/teacherassignments.csv - 20181230 14:08:22
+---------------------------------------------------------------------------
+message sent from administrator\Controller::checkTeacherAssignments
+/var/www/vhosts/suso.schulen.konstanz.de/httpdocs/intern//download/teacherassignments.csv - 20181230 14:08:24
+---------------------------------------------------------------------------
+message sent from administrator\Model::finishRegistrationRequest
+ermittelte Email für Anfrage 21 : codonnell@djoglobal.com - 20190108 22:32:21
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Anfrage Nr: 21 von Email: codonnell@djoglobal.com - 20190108 22:32:21
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Mail an: codonnell@djoglobal.com mit Nachricht
+Sie haben am 2019-01-08 18:03:14 einen Registrierungscode für Florence-may O´Donnell (05b) angefordert. 
+						<br>Registrieren Sie Ihr Kind mit dem Code 8a3b0ce5-624c8815-0162-4cbb47b3-00b4<br><br>Diese Nachricht wurde automatisch generiert! - 20190108 22:32:21
+---------------------------------------------------------------------------
+message sent from administrator\Model::finishRegistrationRequest
+ermittelte Email für Anfrage 22 : elenasmiley@web.de - 20190108 22:32:34
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Anfrage Nr: 22 von Email: elenasmiley@web.de - 20190108 22:32:34
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Mail an: elenasmiley@web.de mit Nachricht
+Sie haben am 2019-01-08 23:31:09 einen Registrierungscode für Elena Hoefer (12) angefordert. 
+						<br>Registrieren Sie Ihr Kind mit dem Code 8a35bd03-58dddf86-0158-df565f2a-1326<br><br>Diese Nachricht wurde automatisch generiert! - 20190108 22:32:34
+---------------------------------------------------------------------------
+message sent from Model::editAbsence
+UPDATE absenzen set beginn="2019-01-15",ende="2019-01-15",kommentar="",adminMeldung=1,adminMeldungDatum=CURRENT_TIMESTAMP,adminMeldungTyp = 0 WHERE aid=58 - 20190115 20:25:45
+---------------------------------------------------------------------------
+message sent from Model::editAbsence
+UPDATE absenzen set beginn="2019-01-30",ende="2019-02-01",kommentar="Schülermentorenlehrgang LA",adminMeldung=1,adminMeldungDatum=CURRENT_TIMESTAMP,adminMeldungTyp = 1 WHERE aid=59 - 20190115 21:19:42
+---------------------------------------------------------------------------
+message sent from administrator\Model::finishRegistrationRequest
+ermittelte Email für Anfrage 23 : valentina.enkel@aol.de - 20190116 15:06:23
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Anfrage Nr: 23 von Email: valentina.enkel@aol.de - 20190116 15:06:23
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Mail an: valentina.enkel@aol.de mit Nachricht
+Sie haben am 2019-01-16 15:32:49 einen Registrierungscode für Larisa Schirdewahn (05c) angefordert. 
+						<br>Registrieren Sie Ihr Kind mit dem Code 8a3b0cc6-66680379-0166-682aa9e3-000f<br><br>Diese Nachricht wurde automatisch generiert! - 20190116 15:06:23
+---------------------------------------------------------------------------
+message sent from administrator\Model::finishRegistrationRequest
+ermittelte Email für Anfrage 24 : birgit.kautz@gmx.de - 20190116 20:07:26
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Anfrage Nr: 24 von Email: birgit.kautz@gmx.de - 20190116 20:07:26
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Mail an: birgit.kautz@gmx.de mit Nachricht
+Sie haben am 2019-01-16 17:32:32 einen Registrierungscode für Eva-Lotta Kautz (09c) angefordert. 
+						<br>Registrieren Sie Ihr Kind mit dem Code 8a35bd03-58dddf86-0158-df565b04-0cc7<br><br>Diese Nachricht wurde automatisch generiert! - 20190116 20:07:26
+---------------------------------------------------------------------------
+message sent from administrator\Model::finishRegistrationRequest
+ermittelte Email für Anfrage 26 : boettcher.tanja@web.de - 20190117 09:04:21
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Anfrage Nr: 26 von Email: boettcher.tanja@web.de - 20190117 09:04:21
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Mail an: boettcher.tanja@web.de mit Nachricht
+Sie haben am 2019-01-17 07:32:15 einen Registrierungscode für Janne Böttcher (06d) angefordert. 
+						<br>Registrieren Sie Ihr Kind mit dem Code 8a3b0cc5-5c2edafc-015c-2f830b83-007f<br><br>Diese Nachricht wurde automatisch generiert! - 20190117 09:04:21
+---------------------------------------------------------------------------
+message sent from administrator\Model::finishRegistrationRequest
+ermittelte Email für Anfrage 27 : halide.tanke@gmail.com - 20190117 10:24:02
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Anfrage Nr: 27 von Email: halide.tanke@gmail.com - 20190117 10:24:02
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Mail an: halide.tanke@gmail.com mit Nachricht
+Sie haben am 2019-01-17 10:55:59 einen Registrierungscode für Ariane Tanke (10a) angefordert. 
+						<br>Registrieren Sie Ihr Kind mit dem Code 8a35bd03-58dddf86-0158-df566f95-2f87<br><br>Diese Nachricht wurde automatisch generiert! - 20190117 10:24:02
+---------------------------------------------------------------------------
+message sent from administrator\Model::finishRegistrationRequest
+ermittelte Email für Anfrage 29 : hannah.gorre@gmx.de - 20190118 05:37:39
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Anfrage Nr: 29 von Email: hannah.gorre@gmx.de - 20190118 05:37:39
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Mail an: hannah.gorre@gmx.de mit Nachricht
+Sie haben am 2019-01-17 22:42:33 einen Registrierungscode für Jona Gorre (08c) angefordert. 
+						<br>Registrieren Sie Ihr Kind mit dem Code 8a35bd03-58dddf86-0158-df566b40-279f<br><br>Diese Nachricht wurde automatisch generiert! - 20190118 05:37:39
+---------------------------------------------------------------------------
+message sent from administrator\Model::finishRegistrationRequest
+ermittelte Email für Anfrage 30 : hannah.gorre@gmx.de - 20190118 05:38:32
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Anfrage Nr: 30 von Email: hannah.gorre@gmx.de - 20190118 05:38:32
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Mail an: hannah.gorre@gmx.de mit Nachricht
+Sie haben am 2019-01-17 22:43:53 einen Registrierungscode für Jasper Gorre (05a) angefordert. 
+						<br>Registrieren Sie Ihr Kind mit dem Code 8a3b0ce5-624c8815-0162-4e3f0b91-070e<br><br>Diese Nachricht wurde automatisch generiert! - 20190118 05:38:32
+---------------------------------------------------------------------------
+message sent from Model::editAbsence
+UPDATE absenzen set beginn="2019-01-25",ende="2019-04-12",kommentar="Austausch nach Australien (Sydney)",adminMeldung=1,adminMeldungDatum=CURRENT_TIMESTAMP,adminMeldungTyp = 1 WHERE aid=60 - 20190118 07:44:07
+---------------------------------------------------------------------------
+message sent from administrator\Model::finishRegistrationRequest
+ermittelte Email für Anfrage 31 : diewengerfamilie@gmail.com - 20190119 17:36:08
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Anfrage Nr: 31 von Email: diewengerfamilie@gmail.com - 20190119 17:36:08
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Mail an: diewengerfamilie@gmail.com mit Nachricht
+Sie haben am 2019-01-19 15:11:11 einen Registrierungscode für Lea Wenger (08d) angefordert. 
+						<br>Registrieren Sie Ihr Kind mit dem Code 8a35bd03-58dddf86-0158-df5651fb-0142<br><br>Diese Nachricht wurde automatisch generiert! - 20190119 17:36:08
+---------------------------------------------------------------------------
+message sent from administrator\Model::finishRegistrationRequest
+ermittelte Email für Anfrage 32 : diewengerfamilie@gmail.com - 20190119 17:36:26
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Anfrage Nr: 32 von Email: diewengerfamilie@gmail.com - 20190119 17:36:26
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Mail an: diewengerfamilie@gmail.com mit Nachricht
+Sie haben am 2019-01-19 15:11:55 einen Registrierungscode für Hannah Wenger (05c) angefordert. 
+						<br>Registrieren Sie Ihr Kind mit dem Code 8a3b0cca-62474e57-0162-48330ebf-03c1<br><br>Diese Nachricht wurde automatisch generiert! - 20190119 17:36:26
+---------------------------------------------------------------------------
+message sent from administrator\Model::finishRegistrationRequest
+ermittelte Email für Anfrage 33 : schweizer664@t-online.de - 20190119 17:36:50
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Anfrage Nr: 33 von Email: schweizer664@t-online.de - 20190119 17:36:50
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Mail an: schweizer664@t-online.de mit Nachricht
+Sie haben am 2019-01-19 16:11:12 einen Registrierungscode für Isabell Schweizer (06a) angefordert. 
+						<br>Registrieren Sie Ihr Kind mit dem Code 8a3b0cc5-5c52d455-015c-532ea7c5-00a4<br><br>Diese Nachricht wurde automatisch generiert! - 20190119 17:36:50
+---------------------------------------------------------------------------
+message sent from administrator\Model::finishRegistrationRequest
+ermittelte Email für Anfrage 34 : regina.saruga@gmail.com - 20190120 15:41:04
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Anfrage Nr: 34 von Email: regina.saruga@gmail.com - 20190120 15:41:04
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Mail an: regina.saruga@gmail.com mit Nachricht
+Sie haben am 2019-01-20 16:21:15 einen Registrierungscode für Bakisi Nsakala (10d) angefordert. 
+						<br>Registrieren Sie Ihr Kind mit dem Code 8a35bd03-58dddf86-0158-df565612-05e5<br><br>Diese Nachricht wurde automatisch generiert! - 20190120 15:41:04
+---------------------------------------------------------------------------
+message sent from Model::editAbsence
+UPDATE absenzen set beginn="2019-01-22",ende="2019-01-25",kommentar="Oma verstorben",adminMeldung=2,adminMeldungDatum=CURRENT_TIMESTAMP,adminMeldungTyp = 0 WHERE aid=101 - 20190122 07:03:08
+---------------------------------------------------------------------------
+message sent from Model::editAbsence
+UPDATE absenzen set beginn="2019-01-22",ende="2019-01-25",kommentar="Oma verstorben",adminMeldung=2,adminMeldungDatum=CURRENT_TIMESTAMP,adminMeldungTyp = 0 WHERE aid=100 - 20190122 07:03:36
+---------------------------------------------------------------------------
+message sent from administrator\Model::finishRegistrationRequest
+ermittelte Email für Anfrage 35 : delfsdrt@aol.com - 20190123 15:56:09
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Anfrage Nr: 35 von Email: delfsdrt@aol.com - 20190123 15:56:09
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Mail an: delfsdrt@aol.com mit Nachricht
+Sie haben am 2019-01-23 08:57:06 einen Registrierungscode für Inga Delfs (07a) angefordert. 
+						<br>Registrieren Sie Ihr Kind mit dem Code 8a35bd03-58dddf86-0158-df56669c-1f51<br><br>Diese Nachricht wurde automatisch generiert! - 20190123 15:56:09
+---------------------------------------------------------------------------
+message sent from administrator\Model::finishRegistrationRequest
+ermittelte Email für Anfrage 38 : sus.friedland@gmail.com - 20190128 09:16:31
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Mail an: sus.friedland@gmail.com mit Nachricht
+Sie haben am 2019-01-28 08:31:47 einen Registrierungscode für Helena Friedland (05a) angefordert. 
+						<br>Registrieren Sie Ihr Kind mit dem Code 8a3b0ce5-6247a4d8-0162-48a87891-026f<br><br>Diese Nachricht wurde automatisch generiert! - 20190128 09:16:31
+---------------------------------------------------------------------------
+message sent from administrator\Model::finishRegistrationRequest
+ermittelte Email für Anfrage 39 : walterzim@gmx.net - 20190130 08:57:56
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Mail an: walterzim@gmx.net mit Nachricht
+Sie haben am 2019-01-29 22:19:14 einen Registrierungscode für Jakob Zimmermann (10d) angefordert. 
+						<br>Registrieren Sie Ihr Kind mit dem Code 8a35bd03-58dddf86-0158-df5655e3-05a3<br><br>Diese Nachricht wurde automatisch generiert! - 20190130 08:57:56
+---------------------------------------------------------------------------
+message sent from administrator\Model::finishRegistrationRequest
+ermittelte Email für Anfrage 41 : carmen.schey-linden@tegometall.com - 20190131 10:55:53
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Mail an: carmen.schey-linden@tegometall.com mit Nachricht
+Sie haben am 2019-01-31 07:38:39 einen Registrierungscode für Yannick Linden (09c) angefordert. 
+						<br>Registrieren Sie Ihr Kind mit dem Code 8a35bd03-58dddf86-0158-df565c1d-0e73<br><br>Diese Nachricht wurde automatisch generiert! - 20190131 10:55:53
+---------------------------------------------------------------------------
+message sent from administrator\Model::finishRegistrationRequest
+ermittelte Email für Anfrage 42 : mgm62@gmx.de - 20190206 11:48:48
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Mail an: mgm62@gmx.de mit Nachricht
+Sie haben am 2019-02-06 12:43:27 einen Registrierungscode für Vincent Müller (07b) angefordert. 
+						<br>Registrieren Sie Ihr Kind mit dem Code 8a35bd03-58dddf86-0158-df566833-2209<br><br>Diese Nachricht wurde automatisch generiert! - 20190206 11:48:48
+---------------------------------------------------------------------------
+message sent from administrator\Model::finishRegistrationRequest
+ermittelte Email für Anfrage 43 : vera.knodel@gmx.de - 20190210 17:03:38
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Mail an: vera.knodel@gmx.de mit Nachricht
+Sie haben am 2019-02-10 17:30:36 einen Registrierungscode für Jakob Knodel (09a) angefordert. 
+						<br>Registrieren Sie Ihr Kind mit dem Code 8a35bd03-58dddf86-0158-df566d05-2acd<br><br>Diese Nachricht wurde automatisch generiert! - 20190210 17:03:38
+---------------------------------------------------------------------------
+message sent from administrator\Model::finishRegistrationRequest
+ermittelte Email für Anfrage 44 : rus.lana@web.de - 20190210 21:44:53
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Mail an: rus.lana@web.de mit Nachricht
+Sie haben am 2019-02-10 21:21:59 einen Registrierungscode für Nadja Helmlinger (07b) angefordert. 
+						<br>Registrieren Sie Ihr Kind mit dem Code 8a35bd03-58dddf86-0158-df5668ee-2343<br><br>Diese Nachricht wurde automatisch generiert! - 20190210 21:44:53
+---------------------------------------------------------------------------
+message sent from administrator\Model::finishRegistrationRequest
+ermittelte Email für Anfrage 49 : leokaas@freenet.de - 20190211 07:36:10
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Mail an: leokaas@freenet.de mit Nachricht
+Sie haben am 2019-02-11 06:55:12 einen Registrierungscode für Josina Kaas (05b) angefordert. 
+						<br>Registrieren Sie Ihr Kind mit dem Code 8a3b0ce5-624c8815-0162-4cc7b55e-0118<br><br>Diese Nachricht wurde automatisch generiert! - 20190211 07:36:10
+---------------------------------------------------------------------------
+message sent from administrator\Model::finishRegistrationRequest
+ermittelte Email für Anfrage 48 : leokaas@freenet.de - 20190211 07:36:24
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Mail an: leokaas@freenet.de mit Nachricht
+Sie haben am 2019-02-11 06:54:06 einen Registrierungscode für Johanna Kaas (07a) angefordert. 
+						<br>Registrieren Sie Ihr Kind mit dem Code 8a35bd03-58dddf86-0158-df5669c9-24d1<br><br>Diese Nachricht wurde automatisch generiert! - 20190211 07:36:24
+---------------------------------------------------------------------------
+message sent from administrator\Model::finishRegistrationRequest
+ermittelte Email für Anfrage 47 : antje.boehme.kn@t-online.de - 20190211 07:36:34
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Mail an: antje.boehme.kn@t-online.de mit Nachricht
+Sie haben am 2019-02-11 06:49:24 einen Registrierungscode für Nicole Böhme (10a) angefordert. 
+						<br>Registrieren Sie Ihr Kind mit dem Code 8a35bd03-58dddf86-0158-df567032-309e<br><br>Diese Nachricht wurde automatisch generiert! - 20190211 07:36:34
+---------------------------------------------------------------------------
+message sent from administrator\Model::finishRegistrationRequest
+ermittelte Email für Anfrage 46 : e_fvt@yahoo.de - 20190211 07:36:43
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Mail an: e_fvt@yahoo.de mit Nachricht
+Sie haben am 2019-02-11 06:07:25 einen Registrierungscode für Anna Fuchs (05a) angefordert. 
+						<br>Registrieren Sie Ihr Kind mit dem Code 8a3b0cb7-61e072c9-0161-e2a2c894-063a<br><br>Diese Nachricht wurde automatisch generiert! - 20190211 07:36:43
+---------------------------------------------------------------------------
+message sent from administrator\Model::finishRegistrationRequest
+ermittelte Email für Anfrage 45 : e_fvt@yahoo.de - 20190211 07:37:12
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Mail an: e_fvt@yahoo.de mit Nachricht
+Sie haben am 2019-02-11 06:05:15 einen Registrierungscode für Katharina Fuchs (09a) angefordert. 
+						<br>Registrieren Sie Ihr Kind mit dem Code 8a35bd03-58dddf86-0158-df566de0-2c55<br><br>Diese Nachricht wurde automatisch generiert! - 20190211 07:37:12
+---------------------------------------------------------------------------
+message sent from administrator\Model::finishRegistrationRequest
+ermittelte Email für Anfrage 50 : MGnan@t-online.de - 20190211 08:29:06
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Mail an: MGnan@t-online.de mit Nachricht
+Sie haben am 2019-02-11 08:57:37 einen Registrierungscode für Katharina Gnan (10c) angefordert. 
+						<br>Registrieren Sie Ihr Kind mit dem Code 8a35bd03-58dddf86-0158-df5653c0-0332<br><br>Diese Nachricht wurde automatisch generiert! - 20190211 08:29:06
+---------------------------------------------------------------------------
+message sent from administrator\Model::finishRegistrationRequest
+ermittelte Email für Anfrage 51 : Antjevoelkle@online.de - 20190211 09:09:02
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Mail an: Antjevoelkle@online.de mit Nachricht
+Sie haben am 2019-02-11 10:04:11 einen Registrierungscode für Lisa Völkle (06b) angefordert. 
+						<br>Registrieren Sie Ihr Kind mit dem Code 8a3b0cce-5b37da03-015b-38273c8f-0147<br><br>Diese Nachricht wurde automatisch generiert! - 20190211 09:09:02
+---------------------------------------------------------------------------
+message sent from administrator\Model::finishRegistrationRequest
+ermittelte Email für Anfrage 53 : andreia@web.de - 20190211 17:48:27
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Mail an: andreia@web.de mit Nachricht
+Sie haben am 2019-02-11 18:47:13 einen Registrierungscode für Philip de Salles Leopold (05b) angefordert. 
+						<br>Registrieren Sie Ihr Kind mit dem Code 8a3b0ce5-624c8815-0162-4e597760-076e<br><br>Diese Nachricht wurde automatisch generiert! - 20190211 17:48:27
+---------------------------------------------------------------------------
+message sent from administrator\Model::finishRegistrationRequest
+ermittelte Email für Anfrage 55 : abah@gmx.de - 20190212 06:56:44
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Mail an: abah@gmx.de mit Nachricht
+Sie haben am 2019-02-12 07:42:42 einen Registrierungscode für Sarah Bathelt (06b) angefordert. 
+						<br>Registrieren Sie Ihr Kind mit dem Code 8a3b0cc5-5ba3de34-015b-a3eff7f1-004b<br><br>Diese Nachricht wurde automatisch generiert! - 20190212 06:56:44
+---------------------------------------------------------------------------
+message sent from administrator\Model::finishRegistrationRequest
+ermittelte Email für Anfrage 56 : ms_huber@gmx.de - 20190214 21:59:58
+---------------------------------------------------------------------------
+message sent from administrator\Controller::handleInput
+Mail an: ms_huber@gmx.de mit Nachricht
+Sie haben am 2019-02-14 19:04:39 einen Registrierungscode für Jolina Huber (06d) angefordert. 
+						<br>Registrieren Sie Ihr Kind mit dem Code 8a3b0cc6-68eac9dc-0168-eb90899b-008d
+<br><br>Diese Nachricht wurde automatisch generiert! - 20190214 21:59:58

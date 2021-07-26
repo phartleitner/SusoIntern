@@ -62,11 +62,11 @@ if (isset($data['showAllEvents'])) {
                         } ?>
                     </ul>
                 </div>
+                <?php echo $utility->get("copyright"); ?>
             </div>
             <?php
         }
     } ?>
-
 </div>
 
 <?php include("js.php"); ?>

@@ -80,9 +80,11 @@ if ($userObj instanceof Guardian) {
 if ($vplan) {
     array_push($modules, array("id" => "vplan", "href" => "?type=vplan", "title" => "Vertretungsplan", "icon" => "dashboard"));
 }
+
 if ($events) {
     array_push($modules, array("id" => "events", "href" => "?type=events", "title" => "Termine", "icon" => "today"));
 }
+
 if ($news) {
     array_push($modules, array("id" => "news", "href" => "?type=news", "title" => "Newsletter", "icon" => "library_books"));
 }
@@ -92,6 +94,17 @@ if ($userObj != null) {
         array_push($modules, array("id" => "blog", "href" => "blog", "title" => "Blog", "icon" => "sms", "inner" => "Blog", "external" => true));
     }
 }
+
+/** 
+ * 
+ * Would be overly present, enough in footers.
+ * 
+if (true) {
+    array_push($modules, array("id" => "information", "href" => "?type=information", "title" => "Information", "icon" => "attribution"));
+}
+ * 
+*/
+
 foreach ($modules as $module) {
     $id = $module['id'];
     $link = $module['href'];

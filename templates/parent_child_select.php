@@ -36,19 +36,20 @@ include("header.php");
             <div class="row">
                 <ul class="collection col s12">
                     <?php foreach ($students as $child) { ?>
-                        <li class="collection-item">
+                        <li class="collection-item" style="display: flex; justify-content: left; align-items: center;">
+                            <span class="material-icons" style="color: #009688; cursor: pointer; margin-right: 20px;" onclick="window.location='/intern/v2/#StudentSettings';">settings</span>
+                            <div>
                             <?php echo $child->getSurname() . ", " . $child->getName() . " (Klasse " . $child->getClass() . ")"; ?>
+                            </div>
                         </li>
                     <?php } ?>
                 </ul>
                 <?php } ?>
-            <span style="font-size=10px;">Sie benötigen zur Registrierung weiterer Kinder einen Registrierungsschlüssel! <br><a href="#requirekey" class="teal-text text-darken-2">Ich habe keinen Registrierungsschüssel oder kenne das nicht!</a></span>
+            <span style="font-size: 0.8em; margin-left: 5px;">Sie benötigen zur Registrierung weiterer Kinder einen Registrierungsschlüssel! <br><a href="#requirekey" class="teal-text text-darken-2" style="font-size: 1em; margin-left: 5px;">Ich habe keinen Registrierungsschüssel oder kenne das nicht!</a></span>
             
             </div>
         </div>
-        <div class="card-action center">
-            &copy; <?php echo date("Y"); ?> Heinrich-Suso-Gymnasium Konstanz
-        </div>
+        <?php echo $utility->get("copyright"); ?>
     </div>
 
 </div>
@@ -94,7 +95,6 @@ include("header.php");
            style="margin-bottom: 20px;"><i class="material-icons right">send</i>Jetzt anfordern</a>
     </div>
 </div>
-
 
 <div id="student_blueprint" style="display:none;">
     <div class="input-field col l12 m12 s12">

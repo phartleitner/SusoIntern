@@ -61,9 +61,7 @@ if ($mt > 7) {
             
             </ul>
         </div>
-    </div>
-    <div class="card-action center">
-        &copy; <?php echo date("Y"); ?> Heinrich-Suso-Gymnasium Konstanz
+        <?php echo $utility->get("copyright"); ?>
     </div>
 </div>
 

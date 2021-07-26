@@ -234,6 +234,9 @@ class Controller {
             case "parent_editdata":
                 $template = $this->handleParentEditData();
                 break;
+            case "information":
+                $template = $this->information();
+                break;
             case "teacher_editdata":
                 $template = $this->handleTeacherEditData();
                 break;
@@ -1069,6 +1072,16 @@ class Controller {
             return "login";
         } 
 		
+    }
+
+
+
+    /**
+     * Information / Attributions
+     * @return string returns template to be displayed
+     */
+    protected function information () { 
+        return "information";
     }
 	
 

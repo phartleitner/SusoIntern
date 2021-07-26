@@ -18,7 +18,8 @@ class View {
     public static function getInstance() {
         return self::$instance == null ? (self::$instance = new View()) : self::$instance;
     }
-    
+
+
     
     /**
      * @Constant string $PATH path to template files
@@ -57,6 +58,8 @@ class View {
         
         if ($exists) {
             /** @noinspection PhpIncludeInspection */
+            
+            $utility = new Utility();
             include($templateFile);
         } else {
             die('Could not find template. Please tell your system admin of choice.');

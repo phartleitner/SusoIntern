@@ -52,9 +52,7 @@ if (isset($parents[0]) && isset($parents[1]) ) {
                 </div>
             </div>
         </div>
-        <div class="card-action center">
-            &copy; <?php echo date("Y"); ?> Heinrich-Suso-Gymnasium Konstanz
-        </div>
+        <?php echo $utility->get("copyright"); ?>card-action center
     </div>
 
 </div>

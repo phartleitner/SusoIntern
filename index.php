@@ -11,11 +11,11 @@ require "class.user.php";
 require "class.connect.php";
 require "class.controller.php";
 require "class.model.php";
+require "class.utility.php";
 require "class.view.php";
 require "class.termin.php";
 require "class.coverLesson.php";
 require "class.newsletter.php";
-
 
 
 /* Settings */

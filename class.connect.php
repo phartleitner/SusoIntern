@@ -41,7 +41,7 @@ class Connection
     private function getCredentials()
     {
         include("class.debug.php");
-        $this->iniParams = json_decode(file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/intern/credentials.json"));
+        $this->iniParams = json_decode(file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/intern/credentials.json"), true);
     }
 
     /**
@@ -64,8 +64,8 @@ class Connection
         $reporting = error_reporting(0);
 
         $params = $this->getIniParams();
+        
 
-        var_dump($params['server'], $params['user'], $params['pass'], $params['db']);
         $mysqli = $this->connID = new \mysqli($params['server'], $params['user'], $params['pass'], $params['db']);
         error_reporting($reporting);
 		
@@ -75,7 +75,7 @@ class Connection
             exit();
         }
 
-       
+        
         mysqli_set_charset($mysqli, 'utf8');
     }
 

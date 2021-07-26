@@ -41,10 +41,7 @@ class Connection
     private function getCredentials()
     {
         include("class.debug.php");
-		$this->iniParams = array("server" => "localhost","user" => "root", "pass" => "", "db" => "susointern",
-		"ldap" => "https://intranet.suso.schulen.konstanz.de/gpuntis/susointern.php", 
-		"download" => "download", "icsfile" => "SusoTermine","filebase"=>"..//");
-		
+        $this->iniParams = json_decode(file_get_contents($_SERVER["DOCUMENT_HOST"] . "/intern/credentials.json"));
     }
 
     /**

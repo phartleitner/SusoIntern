@@ -403,6 +403,15 @@ class Controller {
 					die(json_encode($arr));
 				}
 				break;
+            case "api";
+                if (!isset($this->input["api"])) {
+                    exit("Requesterror");
+                } else {
+                    $GLOBALS["apiType"] = $this->input["api"];
+                    include($_SERVER["DOCUMENT_ROOT"] . "/intern/class.api.php");
+                    $template = $this->api();
+                }
+                break;
             default:
                 if(isset($_SESSION['user'] ) ) {
 					switch ($_SESSION['user']['type'] ) {
@@ -1082,6 +1091,18 @@ class Controller {
      */
     protected function information () { 
         return "information";
+    }
+
+
+
+
+    /**
+     * API for new Platform
+     * @return string returns template to be displayed
+     */
+    protected function api ()
+    {
+        return "api";
     }
 	
 

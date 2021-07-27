@@ -13,7 +13,9 @@ class Utility {
         
     }
 
-
+    /**
+     * @param type Type of Utility HTML
+     */
 
     public function get ($type) 
     {

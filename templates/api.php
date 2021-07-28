@@ -1,7 +1,12 @@
 <?php
 $data = $this->getDataForView();
-/** @var Guardian $user */
+
 $user = $data['user'];
+if (isset($data["usr"])) {
+    $user = $data["usr"];
+}
+$userType = $user->getClassType();
+
 $today = date("Ymd");
 
 $today = date('d.m.Y');
@@ -17,7 +22,8 @@ $api = new Api();
 
 if (in_array($apiType, [
     "test",
-    "csrf"
+    "csrf",
+    "currentUser"
 ])) {
     if (file_exists($_SERVER["DOCUMENT_ROOT"] . "/intern/templates/api/" . $apiType . '.php')) {
         include($_SERVER["DOCUMENT_ROOT"] . "/intern/templates/api/" . $apiType . '.php');

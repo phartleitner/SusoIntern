@@ -730,6 +730,26 @@ class Model {
         //return new Guardian($data['uid'],$data['email'],$eid,$data['name'],$data['vorname']);
 		return array("fullname"=>$data['name'].", ".$data['vorname'],"email"=>$data['email'] );
 	}
+
+
+    /**
+	* getParentUserByParentId - not sure if above function is working properly
+	* @param int eid
+	* @return array
+	*/
+	public function getParentUserObjByParentId($eid){
+        $data = self::$connection->selectAssociativeValues("SELECT name, vorname, user.email AS email, user.id AS uid 
+        FROM eltern, user 
+        WHERE eltern.id=$eid
+        AND user.id = eltern.userid");
+            if ($data == null)
+                return null;
+            $data = $data[0];
+            
+        return new Guardian($data['uid'],$data['email'],$eid,$data['name'],$data['vorname']);
+    }
+
+
 	/**
 	* getParentByEmailAdress
 	* @param String email

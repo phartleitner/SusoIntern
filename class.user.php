@@ -734,6 +734,7 @@ class StudentUser extends User {
      * @param null|string $class
      * @param null|string $bday
      * @param int         $parent
+     * @param int         $parent2
      * @param string      $courses
      */
     function __construct($id, $name, $surname, $class, $bday, $parent, $parent2,  $courses = null) {
@@ -773,6 +774,14 @@ class StudentUser extends User {
     public function getParent2() {
         return $this->parent2;
     }
+
+    public function getParentObj () {
+        return Model::getInstance()->getParentUserObjByParentId($this->getParent());
+    }
+
+    public function getParent2Obj () {
+        return Model::getInstance()->getParentUserObjByParentId($this->getParent2());
+    }
     
     /**
      * @return string
@@ -790,7 +799,7 @@ class StudentUser extends User {
      */
     public function getData() {
         
-        return array_merge(parent::getData(), array("class" => $this->class, "bday" => $this->bday, "eid" => $this->parent, "courses" => $this->getCourses()));
+        return array_merge(parent::getData(), array("class" => $this->class, "bday" => $this->bday, "eid" => $this->parent, "eid2" => $this->parent2, "courses" => $this->getCourses()));
     }
     
 }
@@ -887,6 +896,16 @@ class Student  {
     public function getEid2() {
         return $this->eid2;
     }
+
+
+    public function getParentObj () {
+        return Model::getInstance()->getParentUserObjByParentId($this->getEid());
+    }
+
+    public function getParent2Obj () {
+        return Model::getInstance()->getParentUserObjByParentId($this->getEid2());
+    }
+
     
     public function getFullName() {
         return $this->getName() . " " . $this->getSurname();
@@ -957,7 +976,7 @@ class Student  {
 	* @return string 
 	*/
 	public function getASVId() {
-			return Model::getInstance()->getASVId($this->id);
+		return Model::getInstance()->getASVId($this->id);
 	}
 	
 	

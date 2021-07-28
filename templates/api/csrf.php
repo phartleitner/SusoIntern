@@ -8,5 +8,7 @@ $api->CSRF();
 
 if (isset($_SESSION["CSRF-token"])) {
     $api->send($_SESSION["CSRF-token"], "CSRF-token. Use it inside a Http-Header named 'CSRF-token'.");
+} else {
+    $api->throw("Servererror", "No CSRF-token set. Please try to reload the page.");
 }
 ?>

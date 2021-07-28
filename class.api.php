@@ -43,6 +43,30 @@ class Api {
             "debug" => $debug
         ]));
     }
+
+
+
+
+
+
+    /**
+     * Checks if CSRF is set
+     */
+
+    public function CSRF ()
+    {
+        if (!isset($_SESSION["CSRF-token"])) {
+            $this->throw("Servererror", "CSRF-SESSION-Variable missing. Please try to reload the page.");
+        }
+        if (!isset($_SERVER['CSRF-token'])) {
+            session_destroy();
+            $this->throw("Requesterror", "CSRF-token-Header not sent. Please include it in the HTTP-Headers. You can receive it from the API endpoint 'csrf'.");
+        }
+        if ($_SERVER['CSRF-token'] !== $_SESSION["CSRF-token"]) {
+            session_destroy();
+            $this->throw("Requesterror", "CSRF-token-Header not correct. Please include it in the HTTP-Headers. You can receive it from the API endpoint 'csrf'.");
+        }
+    }
 }
 
 ?>

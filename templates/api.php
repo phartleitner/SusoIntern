@@ -23,7 +23,8 @@ $api = new Api();
 if (in_array($apiType, [
     "test",
     "csrf",
-    "currentUser"
+    "currentUser",
+    "getUser"
 ])) {
     if (file_exists($_SERVER["DOCUMENT_ROOT"] . "/intern/templates/api/" . $apiType . '.php')) {
         include($_SERVER["DOCUMENT_ROOT"] . "/intern/templates/api/" . $apiType . '.php');

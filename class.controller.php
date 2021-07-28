@@ -49,6 +49,9 @@ class Controller {
         if ($this->model == null)
             $this->model = Model::getInstance();
         $this->input = $input;
+
+        
+
         $this->infoToView = array();
 		$this->chooseLogicHandler();
 	}
@@ -57,26 +60,26 @@ class Controller {
 	*debug function
 	*/
 	protected function readSession(){
-	$msg="";
-	if(!empty($_SESSION) ){
-		$msg = "SESSION:\r\n";
-		foreach ($_SESSION as $key => $value){
-			if ($key != "notifications") {
-			$msg .= $key." -- ";
-			if (is_array($value) ) {
-				foreach ($value as $k=>$v) {
-						$msg .= "[".$k. " : ".$v."]\r\n";
-				}
-			} else {
-				$msg .= $value;
-			}
-			$msg .="\r\n";
-			}
-		}
-	} else {
-		$msg = "No Session set";
-	}
-	return $msg;
+        $msg="";
+        if(!empty($_SESSION) ){
+            $msg = "SESSION:\r\n";
+            foreach ($_SESSION as $key => $value){
+                if ($key != "notifications") {
+                $msg .= $key." -- ";
+                if (is_array($value) ) {
+                    foreach ($value as $k=>$v) {
+                            $msg .= "[".$k. " : ".$v."]\r\n";
+                    }
+                } else {
+                    $msg .= $value;
+                }
+                $msg .="\r\n";
+                }
+            }
+        } else {
+            $msg = "No Session set";
+        }
+        return $msg;
 	}
 	
 	/*
@@ -177,9 +180,23 @@ class Controller {
 				$this->infoToView['welcomeText'] = $this->getEmptyIfNotExistent($this->model->getOptions(), 'welcomestudent');
 				$this->infoToView['dsgvo'] = self::$user->getDsgvo(self::$user);
 			}
+
+
+            /**
+            * Set CSRF & other saefety stuff
+            */
+            $this->safety_functions();
 		}
-		if (self::$user != null || $this->input['type'] == "app" || $this->input['type'] == "public" || $this->input['type'] == "login" || $this->input['type'] == "register" || $this->input['type'] == "pwdreset" || isset($_SESSION['timeout']) || isset($_SESSION['logout'])  || $this->input['type'] == "confirm" || $this->input['type'] == "application") // those cases work without login
+		if (self::$user != null || $this->input['type'] == "app" || $this->input['type'] == "public" || $this->input['type'] == "login" || $this->input['type'] == "register" || $this->input['type'] == "pwdreset" || isset($_SESSION['timeout']) || isset($_SESSION['logout'])  || $this->input['type'] == "confirm" || $this->input['type'] == "application" || $this->input["type"] == "api") // those cases work without login
 		{
+
+        // Handle special case for API in order to allow easy parsing of API
+        if ($this->input["type"] == "api" && self::$user == null) {
+            include($_SERVER["DOCUMENT_ROOT"] . "/intern/class.api.php");
+            $api = new Api();
+            $api->throw("Permissionerror", "Not logged in!");
+        }
+
         switch ($this->input['type']) {
             case "application":
                 $this->handleApplication($this->input);
@@ -1716,7 +1733,13 @@ class Controller {
     }
 
     
-  
+    
+    private function safety_functions () 
+    {
+        if (!isset($_SESSION["CSRF-token"])) {
+            $_SESSION["CSRF-token"] = bin2hex(random_bytes(28));
+        }
+    }
 
 
 

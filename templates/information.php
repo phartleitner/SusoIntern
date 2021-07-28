@@ -78,8 +78,8 @@ include("header.php");
 
 
 
-<div id="dsgvo" class="modal" style="overflow: hidden;">
-    <div class="modal-content" style="overflow: hidden;">
+<div id="dsgvo" class="modal" style="overflow-x: hidden; overflow-y: auto;">
+    <div class="modal-content" style="overflow-x: hidden; overflow-y: auto;">
         <img src="/intern/assets/dsgvo.png" style="width: 100%;">
         <a href="https://www.suso.schulen.konstanz.de/HP/?option=com_content&view=article&id=479">Mehr</a>
     </div>

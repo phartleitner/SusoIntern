@@ -154,7 +154,7 @@ include("js.php");
 ?>
 <script type="text/javascript">
 <?php
-include("absence_mgt.php"); 
+include("absence_mgt.js"); 
 ?>
 /*shownotice = <?php echo $shownotice ?>;
 document.addEventListener("DOMContentLoaded", function(event) {

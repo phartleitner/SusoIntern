@@ -37,8 +37,9 @@ include("header.php");
                 <ul class="collection col s12">
                     <?php foreach ($students as $child) { ?>
                         <li class="collection-item" style="display: flex; justify-content: left; align-items: center;">
-                        <span title="Einverständniserklärungen bearbeiten" class="material-icons" style="color: #009688; cursor: pointer; margin-right: 20px;" onclick="window.location='?type=consent&child=<?php echo $child->getId(); ?>';">settings</span>                            <div>
-                            <?php echo $child->getSurname() . ", " . $child->getName() . " (Klasse " . $child->getClass() . ")"; ?>
+                        <span title="Einverständniserklärungen bearbeiten" class="material-icons" style="color: #009688; cursor: pointer; margin-right: 20px;" onclick="consentOpenModal(<?php echo $child->getId(); ?>);">settings</span>                            
+                            <div>
+                                <?php echo $child->getSurname() . ", " . $child->getName() . " (Klasse " . $child->getClass() . ")"; ?>
                             </div>
                         </li>
                     <?php } ?>
@@ -52,6 +53,7 @@ include("header.php");
     </div>
 
 </div>
+
 <div id="addstudent" class="modal">
     <div class="modal-content">
         <h4>Schüler hinzufügen</h4>
@@ -104,6 +106,10 @@ include("header.php");
 </div>
 
 <?php include("js.php"); ?>
+
+
+<div id="consentModals"></div>
+<script><?php include('parent_consent.js'); ?></script>
 
 <script type="application/javascript">
     function submitStudentForm() {

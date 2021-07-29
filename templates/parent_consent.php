@@ -2,6 +2,9 @@
 $data = $this->getDataForView();
 $input = array_merge($_GET, $_POST);
 
+/* Get Student Object by ID */
+$student = Model::getInstance()->getStudentById($input['child']);
+
 include("header.php");
 
 ?>
@@ -14,8 +17,8 @@ include("header.php");
 					<i class="material-icons">chevron_left</i>
 				</a>
                 Einverständniserklärungen bearbeiten <br>
+                <b><?php echo $student->getFullName() ?></b>
             </span><br>
-            <b>Kind ID:</b> <?php echo $input['child']; ?>
         </div>
 
         <?php echo $utility->get("copyright"); ?>

@@ -25,8 +25,9 @@ $welcomeText = "Sie müssen zunächst Ihre Kinder registrieren, bevor Sie die An
 }
 ?>
 	<?php if ($shownotice) { ?>
+
+<div class="container">
 	<div class="row">
-		
 		<div class="col s12 ">
 			<div class="card white">
 				<div class="card-content">
@@ -146,7 +147,7 @@ $welcomeText = "Sie müssen zunächst Ihre Kinder registrieren, bevor Sie die An
 		<?php } ?>
 		
 	</div>
-
+</div>
 
 <?php 
 include("js.php"); 

@@ -840,8 +840,14 @@ class Student  {
      * @var array(String) student's courses
      */
     protected $courses;
+
+    /**
+     * @var string[] consents given by parents
+     */
+    protected $consent;
+
     
-    public function __construct($id, $class, $surname, $name, $bday, $eid = null,$eid2 = null) {
+    public function __construct($id, $class, $surname, $name, $bday, $eid = null,$eid2 = null, $consent = null) {
         $this->id = intval($id);
         $this->class = $class;
         $this->surname = $surname;
@@ -849,6 +855,7 @@ class Student  {
         $this->bday = $bday;
         $this->eid = $eid;
         $this->eid2 = $eid2;
+        $this->consent = json_decode($consent, true);
     }
 	
 	
@@ -895,6 +902,14 @@ class Student  {
      */
     public function getEid2() {
         return $this->eid2;
+    }
+
+
+    /**
+     * @return string[]
+     */
+    public function getConsent () {
+        return $this->consent;
     }
 
 

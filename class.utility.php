@@ -23,7 +23,7 @@ class Utility {
             case "copyright":
                 return '
                 <div class="card-action center">
-                    <span style="cursor: pointer; font-weight: lighter;" onclick="window.location=\'/intern/?type=information\';">&copy; '.date("Y").' Heinrich-Suso-Gymnasium Konstanz</span>
+                    <span style="cursor: pointer;" onclick="window.location=\'/intern/?type=information\';">&copy; <?php echo date("Y"); ?> Heinrich-Suso-Gymnasium Konstanz</span>
                 </div>
                 ';
                 break;
@@ -32,7 +32,7 @@ class Utility {
                 <div class="card-action center">
                     <div class="divider"></div>
                     <br/>
-                    <span style="cursor: pointer; font-weight: lighter;" onclick="window.location=\'/intern/?type=information\';">&copy; '.date("Y").' Heinrich-Suso-Gymnasium Konstanz</span>
+                    <span style="cursor: pointer;" onclick="window.location=\'/intern/?type=information\';">&copy; <?php echo date("Y"); ?> Heinrich-Suso-Gymnasium Konstanz</span>
                 </div>
                 ';
                 break;

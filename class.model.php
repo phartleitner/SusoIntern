@@ -123,7 +123,6 @@ class Model {
      * @return User | Teacher | Admin | Guardian
      */
     public function getUserById($uid,$data = null) {
-        
         if ($data == null)
             $data = self::$connection->selectAssociativeValues("SELECT * FROM user WHERE id=$uid");
         if ($data == null)
@@ -145,7 +144,6 @@ class Model {
                 return null;
                 break;
         }
-        
     }
     
     /**
@@ -282,7 +280,7 @@ class Model {
         
         $data = $data[0];
         
-        return new Student($data['id'], $data['klasse'], $data['name'], $data['vorname'], $data['gebdatum'], $data['eid'], $data['eid2']);
+        return new Student($data['id'], $data['klasse'], $data['name'], $data['vorname'], $data['gebdatum'], $data['eid'], $data['eid2'], $data['zustimmungen']);
     }
 
     /**
@@ -3374,6 +3372,54 @@ class Model {
         $write = '[ '.date('Y-m-d H:i:s')." ] *** [action: ".$line."]\r\n";
         fputs($fh,$write);
         fclose($fh);
+    }
+
+
+
+
+
+
+
+    /**
+     * @param int studentId
+     * @return string[] Returns consents
+     */
+    public function getStudentConsents ($studentId) {
+        return $this->getStudentById($studentId)->getConsent();
+    }
+
+
+    /**
+     * Sets students consents
+     *  @param int $studentId
+     *  @param string $consents
+     */
+    private function setStudentConsents ($studentId, $consents) {
+        $query = "UPDATE schueler SET zustimmungen=? WHERE id=?;";
+        $stmt = $this->connId->prepare($query);
+        $stmt->bind_param("si", $consents, $studentId);
+        $stmt->execute();
+        $stmt->close();
+        return true;
+    }
+
+
+    /**
+     * @param int $studentId
+     * @param string $consent
+     */
+    public function toggleStudentConsent ($studentId, $consent) {
+        $consents = $this->getStudentConsents($studentId);
+        if (in_array($consent, $consents)) {
+            $index = array_search($consent, $consents);
+            array_splice($consents, $index, 1);
+            $this->setStudentConsents($studentId, $consents);
+            return false;
+        } else {
+            array_push($consents, $consent);
+            $this->setStudentConsents($studentId, $consents);
+            return true;
+        }
     }
 }
 

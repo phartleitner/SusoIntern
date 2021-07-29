@@ -1,7 +1,9 @@
 <?php
 $data = $this->getDataForView();
 
-$user = $data['user'];
+if (isset($data["user"])) {
+    $user = $data['user'];
+}
 if (isset($data["usr"])) {
     $user = $data["usr"];
 }
@@ -24,7 +26,8 @@ if (in_array($apiType, [
     "test",
     "csrf",
     "currentUser",
-    "getUser"
+    "getUser",
+    "getStudentConsent"
 ])) {
     if (file_exists($_SERVER["DOCUMENT_ROOT"] . "/intern/templates/api/" . $apiType . '.php')) {
         include($_SERVER["DOCUMENT_ROOT"] . "/intern/templates/api/" . $apiType . '.php');

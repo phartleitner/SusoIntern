@@ -25,6 +25,7 @@ if (isset($_SESSION["user"])) {
                     ]);
                 }
                 array_push($children, [
+                    "id" => $child->getId(),
                     "name" => $child->getName(),
                     "surname" => $child->getSurname(),
                     "class" => $child->getClass(),

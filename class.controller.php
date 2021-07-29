@@ -229,6 +229,17 @@ class Controller {
 				$this->infoToView['user'] = self::$user;
                 $template = "parent_child_select";
                 break;
+            case "consent":
+                if (self::$user == null)
+                    break;
+                if (!self::$user instanceof Guardian) {
+                    $this->notify("Sie müssen ein Elternteil sein, um auf diese Seite zugreifen zu können!");
+                    
+                    return $this->getDashBoardName();
+                }
+				$this->infoToView['user'] = self::$user;
+                $template = "parent_consent";
+                break;
             case "login":
                 $template = $this->login();
                 break;

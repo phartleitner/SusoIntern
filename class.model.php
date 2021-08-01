@@ -3448,7 +3448,7 @@ class Model {
                 array_push($return, $row);
             }
         }
-        
+
         return $return;
     }
 
@@ -3475,6 +3475,99 @@ class Model {
 
 
         return $return;
+    }
+
+
+
+
+
+
+
+
+    public function getSettings ($id)
+    {
+        $this->settingEntryMakeExist($id);
+
+
+        $query = "SELECT * FROM settings WHERE settings.id=?";
+
+        $stmt = self::$connection->getConnection()->prepare($query);
+        
+        $stmt->bind_param("s", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                return $row;
+            }
+        } else {
+            return false;
+        }
+    }
+
+
+
+    public function setSetting ($id, $setting, $value) 
+    {
+        if (!in_array($setting, array("profilePublicVisible", "mailPublicVisible"))) {
+            return false;
+        }
+
+        $this->settingEntryMakeExist($id);
+
+        switch ($value) {
+            case "true":
+                $value = 1;
+                break;
+            case "false":
+                $value = 0;
+                break;
+        }
+
+        $query = "UPDATE settings SET " . $setting . "=? WHERE settings.id=?;";
+        $stmt = self::$connection->getConnection()->prepare($query);
+        $stmt->bind_param("is", $value, $id);
+        $stmt->execute();
+        $stmt->close();
+        return true;
+    }
+
+
+
+    private function settingEntryExists ($id) {
+        $query = "SELECT * FROM settings WHERE settings.id=?";
+
+        $stmt = self::$connection->getConnection()->prepare($query);
+        
+        $stmt->bind_param("s", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+
+        if ($result->num_rows > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    private function settingEntryMakeExist ($id) {
+        if ($this->settingEntryExists($id)) {
+            return true;
+        } else {
+            $query = 'INSERT INTO settings (id) VALUES (?)';
+
+            $stmt = self::$connection->getConnection()->prepare($query);
+        
+            $stmt->bind_param("s", $id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $stmt->close();
+            return true;
+        }
     }
 }
 

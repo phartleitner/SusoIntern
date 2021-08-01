@@ -199,6 +199,17 @@ class User  {
     public function getClassType() {
         return "User";
     }
+
+
+
+
+    public function getSettings () {
+        return Model::getInstance()->getSettings($this->getClassType() . ":" . $this->id);
+    }
+
+    public function setSetting ($setting, $value) {
+        return Model::getInstance()->setSetting($this->getClassType() . ":" . $this->id, $setting, $value);
+    }
 }
 
 /**
@@ -409,7 +420,13 @@ class Guardian  extends User  {
     }
 	
 	
-	    
+	public function getSettings () {
+        return Model::getInstance()->getSettings($this->getClassType() . ":" . $this->id);
+    }
+
+    public function setSetting ($setting, $value) {
+        return Model::getInstance()->setSetting($this->getClassType() . ":" . $this->id, $setting, $value);
+    }
     
 }
 
@@ -701,6 +718,16 @@ class Teacher extends User {
     public function setVpInfoDate($datum) {
         $this->vpInfoDate = $datum;
     }
+
+
+
+    public function getSettings () {
+        return Model::getInstance()->getSettings($this->getClassType() . ":" . $this->id);
+    }
+
+    public function setSetting ($setting, $value) {
+        return Model::getInstance()->setSetting($this->getClassType() . ":" . $this->id, $setting, $value);
+    }
     
 }
 
@@ -834,6 +861,16 @@ class StudentUser extends User {
 
     public function getConsentOptionNames () {
         return Model::getInstance()->getConsentOptionNames($this->id);
+    }
+
+
+
+    public function getSettings () {
+        return Model::getInstance()->getSettings($this->getClassType() . ":" . $this->id);
+    }
+
+    public function setSetting ($setting, $value) {
+        return Model::getInstance()->setSetting($this->getClassType() . ":" . $this->id, $setting, $value);
     }
 }
 
@@ -1046,6 +1083,15 @@ class Student  {
 
     public function getConsentOptionNames () {
         return Model::getInstance()->getConsentOptionNames($this->id);
+    }
+
+
+    public function getSettings () {
+        return Model::getInstance()->getSettings($this->getClassType() . ":" . $this->id);
+    }
+
+    public function setSetting ($setting, $value) {
+        return Model::getInstance()->setSetting($this->getClassType() . ":" . $this->id, $setting, $value);
     }
 }
 

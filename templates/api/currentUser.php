@@ -30,7 +30,10 @@ if (isset($_SESSION["user"])) {
                     "surname" => $child->getSurname(),
                     "class" => $child->getClass(),
                     "teachers" => $teachers,
-                    "email" => "" // No Mail addresses stored for students??????//
+                    "email" => "", // No Mail addresses stored for students??????//
+                    "consents" => $child->getConsents(),
+                    "eid" => $child->getEid(),
+                    "eid2" => $child->getEid2()
                 ]);
             }
             $data = array_merge($data, [
@@ -92,7 +95,10 @@ if (isset($_SESSION["user"])) {
             $data = array_merge($data, [
                 "absence"=>$user->getAbsenceState(),
                 "teachers"=>$teachers,
-                "asvid"=>$user->getASVId()
+                "asvid"=>$user->getASVId(),
+                "consents" => $child->getConsents(),
+                "eid" => $child->getEid(),
+                "eid2" => $child->getEid2()
             ]);
             break;
     }

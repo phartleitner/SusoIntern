@@ -3385,6 +3385,9 @@ class Model {
      * @return string[] Returns consents
      */
     public function getStudentConsents ($studentId) {
+        if ($this->getStudentById($studentId)->getConsent() === NULL || $this->getStudentById($studentId)->getConsent() == '') {
+            return array();
+        }
         return $this->getStudentById($studentId)->getConsent();
     }
 
@@ -3395,8 +3398,8 @@ class Model {
      *  @param string $consents
      */
     private function setStudentConsents ($studentId, $consents) {
-        $query = "UPDATE schueler SET zustimmungen=? WHERE id=?;";
-        $stmt = $this->connId->prepare($query);
+        $query = "UPDATE schueler SET schueler.zustimmungen=? WHERE schueler.id=?;";
+        $stmt = self::$connection->getConnection()->prepare($query);
         $stmt->bind_param("si", $consents, $studentId);
         $stmt->execute();
         $stmt->close();
@@ -3413,13 +3416,65 @@ class Model {
         if (in_array($consent, $consents)) {
             $index = array_search($consent, $consents);
             array_splice($consents, $index, 1);
-            $this->setStudentConsents($studentId, $consents);
+            $this->setStudentConsents($studentId, json_encode($consents));
             return false;
         } else {
             array_push($consents, $consent);
-            $this->setStudentConsents($studentId, $consents);
+            $this->setStudentConsents($studentId, json_encode($consents));
             return true;
         }
+    }
+
+
+
+
+
+    public function getConsentOptions ($studentId)
+    {
+        $query = "SELECT * FROM zustimmungen WHERE (betreff LIKE ?) OR (betreff LIKE ?)";
+
+        $stmt = self::$connection->getConnection()->prepare($query);
+        $betreff = '%' . $this->getStudentById($studentId)->getClass() . '%';
+        $all = '%All%';
+        
+        $stmt->bind_param("ss", $betreff, $all);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+        $return = array();
+
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                array_push($return, $row);
+            }
+        }
+        
+        return $return;
+    }
+
+
+
+    public function getConsentOptionNames ($studentId) {
+        $query = "SELECT identifier FROM `zustimmungen` WHERE (betreff LIKE ?) OR (betreff LIKE ?)";
+
+        $stmt = self::$connection->getConnection()->prepare($query);
+        $betreff = '%' . $this->getStudentById($studentId)->getClass() . '%';
+        $all = '%All%';
+        
+        $stmt->bind_param("ss", $betreff, $all);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+        $return = array();
+
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                array_push($return, $row["identifier"]);
+            }
+        }
+
+
+        return $return;
     }
 }
 

@@ -37,7 +37,7 @@ include("header.php");
                 <ul class="collection col s12">
                     <?php foreach ($students as $child) { ?>
                         <li class="collection-item" style="display: flex; justify-content: left; align-items: center;">
-                        <span title="Einverständniserklärungen bearbeiten" class="material-icons" style="color: #009688; cursor: pointer; margin-right: 20px;" onclick="window.location='/client/#ChildSettings'">settings</span>                            
+                        <span title="Einverständniserklärungen bearbeiten" class="material-icons" style="color: #009688; cursor: pointer; margin-right: 20px;" onclick="window.location='/client/#children'">settings</span>                            
                             <div>
                                 <?php echo $child->getSurname() . ", " . $child->getName() . " (Klasse " . $child->getClass() . ")"; ?>
                             </div>

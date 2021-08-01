@@ -737,13 +737,14 @@ class StudentUser extends User {
      * @param int         $parent2
      * @param string      $courses
      */
-    function __construct($id, $name, $surname, $class, $bday, $parent, $parent2,  $courses = null) {
+    function __construct($id, $name, $surname, $class, $bday, $parent, $parent2, $consent = null) {
         parent::__construct($id, 3, null, $name, $surname);
         //$this->id = $id;//entered 20181209 when trying to realise appLogin
 		$this->class = $class;
         $this->bday = $bday;
         $this->parent = $parent;
         $this->parent2 = $parent2;
+        $this->consent = $consent;
         //$this->courses = $courses;  -- 
 		$this->dsgvo = Model::getInstance()->getDsgvoStatus($this);
     }
@@ -775,6 +776,21 @@ class StudentUser extends User {
         return $this->parent2;
     }
 
+
+    /**
+     * @return int
+     */
+    public function getEid() {
+        return $this->parent;
+    }
+    /**
+     * @return int
+     */
+    public function getEid2() {
+        return $this->parent2;
+    }
+
+
     public function getParentObj () {
         return Model::getInstance()->getParentUserObjByParentId($this->getParent());
     }
@@ -801,7 +817,24 @@ class StudentUser extends User {
         
         return array_merge(parent::getData(), array("class" => $this->class, "bday" => $this->bday, "eid" => $this->parent, "eid2" => $this->parent2, "courses" => $this->getCourses()));
     }
-    
+
+
+    /**
+     * @return string[]
+     */
+    public function getConsent () {
+        return $this->consent;
+    }
+
+
+    public function getConsentOptions () {
+        return Model::getInstance()->getConsentOptions($this->id);
+    }
+
+
+    public function getConsentOptionNames () {
+        return Model::getInstance()->getConsentOptionNames($this->id);
+    }
 }
 
 /**
@@ -994,8 +1027,26 @@ class Student  {
 		return Model::getInstance()->getASVId($this->id);
 	}
 	
-	
 
+
+	public function toggleConsent($consent) 
+    {
+        return Model::getInstance()->toggleStudentConsent($this->id, $consent);
+    }
+
+    public function getConsents() 
+    {
+        return Model::getInstance()->getStudentConsents($this->id);
+    }
+
+    public function getConsentOptions () {
+        return Model::getInstance()->getConsentOptions($this->id);
+    }
+
+
+    public function getConsentOptionNames () {
+        return Model::getInstance()->getConsentOptionNames($this->id);
+    }
 }
 
 ?>

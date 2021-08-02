@@ -31,7 +31,10 @@ if (in_array($apiType, [
     "toggleConsent",
     "getConsentOptions",
     "getSetting",
-    "setSetting"
+    "setSetting",
+    "getRooms",
+    "getRoom",
+    "sendMessage"
 ])) {
     if (file_exists($_SERVER["DOCUMENT_ROOT"] . "/intern/templates/api/" . $apiType . '.php')) {
         include($_SERVER["DOCUMENT_ROOT"] . "/intern/templates/api/" . $apiType . '.php');

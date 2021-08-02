@@ -210,6 +210,21 @@ class User  {
     public function setSetting ($setting, $value) {
         return Model::getInstance()->setSetting($this->getClassType() . ":" . $this->id, $setting, $value);
     }
+
+    public function get_rooms () {
+        return Model::getInstance()->get_rooms($this->getClassType() . ":" . $this->id);
+    }
+
+
+
+    public function get_room ($id) {
+        return Model::getInstance()->getMessagesByRoomId($id);
+    }
+
+
+    public function sendMessage ($roomId, $text) {
+        return Model::getInstance()->sendMessage($roomId, $this->getClassType() . ":" . $this->id, $text);
+    }
 }
 
 /**
@@ -728,6 +743,11 @@ class Teacher extends User {
     public function setSetting ($setting, $value) {
         return Model::getInstance()->setSetting($this->getClassType() . ":" . $this->id, $setting, $value);
     }
+
+
+    public function get_rooms () {
+        return Model::getInstance()->get_rooms($this->getClassType() . ":" . $this->id);
+    }
     
 }
 
@@ -871,6 +891,10 @@ class StudentUser extends User {
 
     public function setSetting ($setting, $value) {
         return Model::getInstance()->setSetting($this->getClassType() . ":" . $this->id, $setting, $value);
+    }
+
+    public function get_rooms () {
+        return Model::getInstance()->get_rooms($this->getClassType() . ":" . $this->id);
     }
 }
 
@@ -1092,6 +1116,22 @@ class Student  {
 
     public function setSetting ($setting, $value) {
         return Model::getInstance()->setSetting($this->getClassType() . ":" . $this->id, $setting, $value);
+    }
+
+
+    public function get_rooms () {
+        return Model::getInstance()->get_rooms($this->getClassType() . ":" . $this->id);
+    }
+
+
+    public function get_room ($id) {
+        return Model::getInstance()->getMessagesByRoomId($id);
+    }
+
+
+
+    public function sendMessage ($roomId, $text) {
+        return Model::getInstance()->sendMessage($roomId, $this->getClassType() . ":" . $this->id, $text);
     }
 }
 

@@ -230,9 +230,17 @@ class User  {
 
     public function get_room_members ($roomId) {
         $return = [];
-        foreach(json_decode($this->get_rooms()[0]["members"], true) as $key => $value) {
-            $user = Model::getInstance()->getUserBySettingId($value);
-            array_push($return, array("surname" => $user["surname"], "name" => $user["name"], "email" => $user["email"], "id" => $user["id"], "isAdmin" => Model::getInstance()->isAdminOfRoom($roomId, $value), "code" => $value));
+        for($i=0; $i<count($this->get_rooms()); $i++) {
+            $room = $this->get_rooms()[$i];
+
+            if (intval($room["id"]) !== intval($roomId)) {
+                continue;
+            }
+
+            foreach(json_decode($room["members"], true) as $key => $value) {
+                $user = Model::getInstance()->getUserBySettingId($value);
+                array_push($return, array("surname" => $user["surname"], "name" => $user["name"], "email" => $user["email"], "id" => $user["id"], "isAdmin" => Model::getInstance()->isAdminOfRoom($roomId, $value), "code" => $value));;
+            }
         }
         return $return;
     }
@@ -1177,9 +1185,17 @@ class Student  {
 
     public function get_room_members ($roomId) {
         $return = [];
-        foreach(json_decode($this->get_rooms()[0]["members"], true) as $key => $value) {
-            $user = Model::getInstance()->getUserBySettingId($value);
-            array_push($return, array("surname" => $user["surname"], "name" => $user["name"], "email" => $user["email"], "id" => $user["id"], "isAdmin" => Model::getInstance()->isAdminOfRoom($roomId, $value), "code" => $value));;
+        for($i=0; $i<count($this->get_rooms()); $i++) {
+            $room = $this->get_rooms()[$i];
+
+            if (intval($room["id"]) !== intval($roomId)) {
+                continue;
+            }
+
+            foreach(json_decode($room["members"], true) as $key => $value) {
+                $user = Model::getInstance()->getUserBySettingId($value);
+                array_push($return, array("surname" => $user["surname"], "name" => $user["name"], "email" => $user["email"], "id" => $user["id"], "isAdmin" => Model::getInstance()->isAdminOfRoom($roomId, $value), "code" => $value));;
+            }
         }
         return $return;
     }

@@ -225,6 +225,45 @@ class User  {
     public function sendMessage ($roomId, $text) {
         return Model::getInstance()->sendMessage($roomId, $this->getClassType() . ":" . $this->id, $text);
     }
+
+
+
+    public function get_room_members ($roomId) {
+        $return = [];
+        foreach(json_decode($this->get_rooms()[0]["members"], true) as $key => $value) {
+            $user = Model::getInstance()->getUserBySettingId($value);
+            array_push($return, array("surname" => $user["surname"], "name" => $user["name"], "email" => $user["email"], "id" => $user["id"], "isAdmin" => Model::getInstance()->isAdminOfRoom($roomId, $value), "code" => $value));
+        }
+        return $return;
+    }
+
+
+
+    public function isAdminOfRoom ($roomId) {
+        return Model::getInstance()->isAdminOfRoom($roomId, $this->getClassType() . ":" . $this->id);
+    }
+
+    public function kickMemberFromRoom ($memberCode, $roomId) {
+        return Model::getInstance()->kickMemberFromRoom($memberCode, $roomId);
+    }
+
+
+    public function promoteDemoteMember ($memberCode, $roomId) {
+        return Model::getInstance()->promoteDemoteMember($memberCode, $roomId);
+    }
+
+
+
+    public function sendRoomInvite ($room, $person) {
+        return Model::getInstance()->sendRoomInvite($room, $person);
+    }
+
+
+
+
+    public function createNewRoom ($name) {
+        return Model::getInstance()->createNewRoom($name, $this->getClassType() . ":" . $this->id);
+    }
 }
 
 /**
@@ -1132,6 +1171,45 @@ class Student  {
 
     public function sendMessage ($roomId, $text) {
         return Model::getInstance()->sendMessage($roomId, $this->getClassType() . ":" . $this->id, $text);
+    }
+
+
+
+    public function get_room_members ($roomId) {
+        $return = [];
+        foreach(json_decode($this->get_rooms()[0]["members"], true) as $key => $value) {
+            $user = Model::getInstance()->getUserBySettingId($value);
+            array_push($return, array("surname" => $user["surname"], "name" => $user["name"], "email" => $user["email"], "id" => $user["id"], "isAdmin" => Model::getInstance()->isAdminOfRoom($roomId, $value), "code" => $value));;
+        }
+        return $return;
+    }
+
+
+
+    public function isAdminOfRoom ($roomId) {
+        return Model::getInstance()->isAdminOfRoom($roomId, $this->getClassType() . ":" . $this->id);
+    }
+
+
+
+    public function kickMemberFromRoom ($memberCode, $roomId) {
+        return Model::getInstance()->kickMemberFromRoom($memberCode, $roomId);
+    }
+
+
+
+    public function promoteDemoteMember ($memberCode, $roomId) {
+        return Model::getInstance()->promoteDemoteMember($memberCode, $roomId);
+    }
+
+
+    public function sendRoomInvite ($room, $person) {
+        return Model::getInstance()->sendRoomInvite($room, $person);
+    }
+
+
+    public function createNewRoom ($name) {
+        return Model::getInstance()->createNewRoom($name, $this->getClassType() . ":" . $this->id);
     }
 }
 

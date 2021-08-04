@@ -34,7 +34,11 @@ if (in_array($apiType, [
     "setSetting",
     "getRooms",
     "getRoom",
-    "sendMessage"
+    "sendMessage",
+    "kickRoomMember",
+    "promoteDemoteMember",
+    "sendRoomInvite",
+    "createNewRoom"
 ])) {
     if (file_exists($_SERVER["DOCUMENT_ROOT"] . "/intern/templates/api/" . $apiType . '.php')) {
         include($_SERVER["DOCUMENT_ROOT"] . "/intern/templates/api/" . $apiType . '.php');

@@ -24,8 +24,11 @@ if (isset($_SESSION["user"])) {
 
     if ($name !== false) {
         $api->send([
+            "id" => $input["roomId"],
             "name" => $name,
-            "messages" => $user->get_room($input["roomId"])
+            "messages" => $user->get_room($input["roomId"]),
+            "members" => $user->get_room_members($input["roomId"]),
+            "isAdmin" => $user->isAdminOfRoom($input["roomId"])
         ], "Rooms of the current user.");
     } else {
         $api->throw("Requesterror", "Room not owned.");

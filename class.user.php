@@ -272,6 +272,11 @@ class User  {
     public function createNewRoom ($name) {
         return Model::getInstance()->createNewRoom($name, $this->getClassType() . ":" . $this->id);
     }
+
+
+    public function getDiscover () {
+        return Model::getInstance()->getDiscover($this->getClassType() . ":" . $this->id);
+    }
 }
 
 /**
@@ -1226,6 +1231,11 @@ class Student  {
 
     public function createNewRoom ($name) {
         return Model::getInstance()->createNewRoom($name, $this->getClassType() . ":" . $this->id);
+    }
+
+
+    public function getDiscover () {
+        return Model::getInstance()->getDiscover($this->getClassType() . ":" . $this->id);
     }
 }
 

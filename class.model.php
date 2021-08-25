@@ -3584,12 +3584,11 @@ class Model {
         if ($this->settingEntryExists($id)) {
             return true;
         } else {
-            $query = 'INSERT INTO settings (id, rooms) VALUES (?, ?)';
+            $query = 'INSERT INTO settings (id) VALUES (?)';
 
             $stmt = self::$connection->getConnection()->prepare($query);
         
-            $rooms = json_encode(array());
-            $stmt->bind_param("ss", $id, $rooms);
+            $stmt->bind_param("s", $id);
             $stmt->execute();
             $result = $stmt->get_result();
             $stmt->close();
@@ -3604,7 +3603,27 @@ class Model {
 
     public function get_roomIds ($identifier) 
     {   
-        return json_decode($this->getSettings($identifier)["rooms"], true);
+        $query = "SELECT * FROM rooms WHERE rooms.members LIKE ?";
+
+        $stmt = self::$connection->getConnection()->prepare($query);
+        
+        $memberstring = '%' . $identifier . '%';
+
+        $stmt->bind_param("s", $memberstring);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+
+        $return = [];
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                array_push($return, $row["id"]);
+            }
+        } else {
+            return false;
+        }
+
+        return $return;
     }
 
 
@@ -3766,14 +3785,16 @@ class Model {
             $row = array(
                 "name" => $ruser->getName(),
                 "surname" => $ruser->getSurname(),
-                "id" => $ruser->getId()
+                "id" => $ruser->getId(),
+                "type" => $ruser->getClassType()
             );
         } else {
             $row = array(
                 "name" => $ruser->getName(),
                 "surname" => $ruser->getSurname(),
                 "id" => $ruser->getId(),
-                "email" => $ruser->getEmail()
+                "email" => $ruser->getEmail(),
+                "type" => $ruser->getClassType()
             );
         }
 
@@ -3811,18 +3832,6 @@ class Model {
         $stmt->bind_param("si", $new, $roomId);
         $stmt->execute();
         $stmt->close();
-
-
-
-        $previous = $this->getSettings($memberCode);
-        $new = json_encode(array_diff(json_decode($previous["rooms"]), [$roomId]));
-
-        $query = "UPDATE settings SET rooms=? WHERE settings.id=?;";
-        $stmt = self::$connection->getConnection()->prepare($query);
-        $stmt->bind_param("ss", $new, $memberCode);
-        $stmt->execute();
-        $stmt->close();
-        return true;
     }
 
 
@@ -3864,24 +3873,6 @@ class Model {
             $stmt->bind_param("si", $new, $roomId);
             $stmt->execute();
             $stmt->close();
-        }
-        
-
-
-
-        $info = json_decode($this->getSettings($userCode)["rooms"]);
-        if (!in_array(intval($roomId), $info)) {
-            array_push($info, intval($roomId));
-            $new = json_encode($info);
-
-            $query = "UPDATE settings SET rooms=? WHERE settings.id=?;";
-            $stmt = self::$connection->getConnection()->prepare($query);
-            $stmt->bind_param("ss", $new, $userCode);
-            $stmt->execute();
-            $stmt->close();
-            return true;
-        } else {
-            return true;
         }
     }
 
@@ -3929,22 +3920,63 @@ class Model {
         
 
 
-        $info = json_decode($this->getSettings($code)["rooms"]);
-        if (!in_array(intval($this->getRoomIdByName(htmlspecialchars($name))), $info)) {
-            array_push($info, intval($this->getRoomIdByName(htmlspecialchars($name))));
-            $new = json_encode($info);
-
-            $query = "UPDATE settings SET rooms=? WHERE settings.id=?;";
-            $stmt = self::$connection->getConnection()->prepare($query);
-            $stmt->bind_param("ss", $new, $code);
-            $stmt->execute();
-            $stmt->close();
-            return true;
-        } else {
-            return true;
-        }
-
         return true;
+    }
+
+
+
+
+    public function getDiscoverUsers ($code) {
+        $query = "SELECT * FROM settings WHERE profilePublicVisible=1";
+
+        $stmt = self::$connection->getConnection()->prepare($query);
+
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+
+        $return = [];
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $ruser = $this->getUserBySettingId($row["id"]);
+                array_push($return, array("type" => "user", "userType" => $ruser["type"], "code" => $row["id"], "name" => $ruser["name"], "surname" => $ruser["surname"]));
+            }
+            return $return;
+        } else {
+            return false;
+        }
+    }
+
+
+
+
+    public function getDiscoverRooms ($code) {
+        $query = "SELECT * FROM rooms WHERE joinable=1";
+
+        $stmt = self::$connection->getConnection()->prepare($query);
+
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+
+
+        $return = [];
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $inChat = in_array($row["id"], array_values($this->get_roomIds($code)));
+
+                array_push($return, array("type" => "room", "id" => $row["id"], "name" => $row["name"], "created" => $row["created"], "inChat" => $inChat));
+            }
+            return $return;
+        } else {
+            return false;
+        }
+    }
+
+
+
+    public function getDiscover ($code) {
+        return array_merge($this->getDiscoverRooms($code), $this->getDiscoverUsers($code));
     }
 }
 

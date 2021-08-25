@@ -9,8 +9,14 @@ if (isset($_SESSION["user"])) {
         $api->throw("Permissionerror", "No user provided / logged in.");
     }
 
-    if (!isset($input["roomId"])) {
-        $api->throw("Requesterror", "Please provide roomId.");
+    if (!isset($input["roomId"]) || intval($input["roomId"]) < 0) {
+        $api->send([
+            "id" => "-1",
+            "name" => "Benachrichtigungen",
+            "messages" => $user->getSystemMessages(),
+            "members" => [],
+            "isAdmin" => []
+        ], "Rooms of the current user.");
     }
 
     $name = false;

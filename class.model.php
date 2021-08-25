@@ -3989,6 +3989,83 @@ class Model {
     public function getDiscover ($code) {
         return array_merge($this->getDiscoverRooms($code), $this->getDiscoverUsers($code));
     }
+
+
+
+
+    private function getSystemMessages () {
+        $query = "SELECT * FROM systemmessages;";
+
+        $stmt = self::$connection->getConnection()->prepare($query);
+
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+
+        $return = [];
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                array_push($return, $row);
+            }
+            return $return;
+        } else {
+            return false;
+        }
+    }
+
+
+    public function getSystemMessagesBySelector ($selector) {
+        $all = $this->getSystemMessages();
+        $return = [];
+
+        foreach($all as $message) {
+            $sel = json_decode($message["selector"], true);
+
+            if (
+                ($selector["grade"] === true || $sel["grade"] === true || in_array($selector["grade"], $sel["grade"])) &&
+                ($selector["class"] === true || $sel["class"] === true || in_array($selector["class"], $sel["class"])) &&
+                ($selector["type"] === true || $sel["type"] === true || in_array($selector["type"], $sel["type"]))
+                ) {
+                    $row = $message;
+                    $row["sent"] = $row["date"];
+
+                    if (strpos($row["userId"], "Guardian") !== false) {
+                        $row["author"] = $this->getUserById(str_replace("Guardian:", "", $row["userId"]))->getName() . $this->getUserById(str_replace("Guardian:", "", $row["userId"]))->getSurname();
+                    } else if (strpos($row["userId"], "Teacher") !== false) {
+                        $row["author"] = $this->getUserById(str_replace("Teacher:", "", $row["userId"]))->getName() . $this->getUserById(str_replace("Teacher:", "", $row["userId"]))->getSurname();
+                    } else if (strpos($row["userId"], "Admin") !== false) {
+                        $row["author"] = $this->getUserById(str_replace("Admin:", "", $row["userId"]))->getName() . $this->getUserById(str_replace("Admin:", "", $row["userId"]))->getSurname();
+                    } else if (strpos($row["userId"], "Student") !== false) {
+                        $row["author"] = $this->getStudentById(str_replace("Student:", "", $row["userId"]))->getName() . $this->getStudentById(str_replace("Student:", "", $row["userId"]))->getSurname();
+                    }
+
+                    array_push($return, $row);
+                continue;
+            }
+        }
+
+        return $return;
+    }
+
+
+
+
+    public function writeSystemMessage ($userId, $text, $grade, $class, $type, $priority) {
+        $selector = json_encode(["grade" => $grade, "class" => $class, "type" => $type]);
+
+        $date = time();
+
+        $query = 'INSERT INTO systemmessages (userId, date, selector, text, priority) VALUES (?, ?, ?, ?, ?)';
+
+        $stmt = self::$connection->getConnection()->prepare($query);
+        $created = time();
+        $stmt->bind_param("sissi", $userId, $date, $selector, $text, $priority);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+        
+        return true;
+    }
 }
 
 

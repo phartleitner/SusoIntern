@@ -282,6 +282,12 @@ class User  {
     public function joinRoom ($roomId) {
         return Model::getInstance()->sendRoomInvite($roomId, $this->getClassType() . ":" . $this->id);
     }
+
+
+
+    public function getSystemMessages () {
+        return Model::getInstance()->getSystemMessagesBySelector(["grade" => "", "class" => "", "type" => $this->getClassType()]);
+    }
 }
 
 /**
@@ -1246,6 +1252,12 @@ class Student  {
 
     public function joinRoom ($roomId) {
         return Model::getInstance()->sendRoomInvite($roomId, $this->getClassType() . ":" . $this->id);
+    }
+
+
+
+    public function getSystemMessages () {
+        return Model::getInstance()->getSystemMessagesBySelector(["grade" => "", "class" => "", "type" => $this->getClassType()]);
     }
 }
 

@@ -277,6 +277,11 @@ class User  {
     public function getDiscover () {
         return Model::getInstance()->getDiscover($this->getClassType() . ":" . $this->id);
     }
+
+    
+    public function joinRoom ($roomId) {
+        return Model::getInstance()->sendRoomInvite($roomId, $this->getClassType() . ":" . $this->id);
+    }
 }
 
 /**
@@ -1236,6 +1241,11 @@ class Student  {
 
     public function getDiscover () {
         return Model::getInstance()->getDiscover($this->getClassType() . ":" . $this->id);
+    }
+    
+
+    public function joinRoom ($roomId) {
+        return Model::getInstance()->sendRoomInvite($roomId, $this->getClassType() . ":" . $this->id);
     }
 }
 

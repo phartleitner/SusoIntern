@@ -3939,7 +3939,18 @@ class Model {
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 $ruser = $this->getUserBySettingId($row["id"]);
-                array_push($return, array("type" => "user", "userType" => $ruser["type"], "code" => $row["id"], "name" => $ruser["name"], "surname" => $ruser["surname"]));
+                $ruser["roomId"] = false;
+
+                foreach($this->get_rooms($code) as $room) {
+                    $people = array_values(json_decode($room["members"]));
+                    if (in_array($ruser["type"] . ":" . $ruser["id"], $people) && count($people) < 3) {
+                        $ruser["inChat"] = true;
+                        $ruser["roomId"] = $room["id"];
+                    }
+                }
+
+                
+                array_push($return, array("type" => "user", "userType" => $ruser["type"], "code" => $row["id"], "name" => $ruser["name"], "surname" => $ruser["surname"], "inChat" => $ruser["inChat"], "id" => $ruser["roomId"]));
             }
             return $return;
         } else {

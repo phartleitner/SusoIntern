@@ -17,14 +17,44 @@ $welcomeText = $data['welcomeText'];
 		<div class="col s12 ">
 			<div class="card white">
 				<div class="card-content">
-					<span class="card-title">aktuelle Hinweise
-						<a class="btn-flat teal-text " onClick="showNotice();"><i id="button" class="material-icons">expand_more</i></a>
-					</span>
-									
-					<div id="notice" style="display: none;">
-					<?php echo $welcomeText; ?>
-					</div>
-					
+					<div class="card-title" style="margin-bottom: 20px;">Informationen</div>
+
+					<!--
+						<span class="card-title">aktuelle Hinweise
+							<a class="btn-flat teal-text " onClick="showNotice();"><i id="button" class="material-icons">expand_more</i></a> 
+						</span>
+						
+						
+						<div id="notice" style="display: none;">
+						<?php echo $welcomeText; ?>
+						</div>
+					-->
+					<ul class="collapsible">
+						<li>
+						<div class="collapsible-header card-title" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem;">Aktuelles zu Corona & Fernlernen <i class="material-icons">expand_more</i></div>
+						<div id ="notes" class="collapsible-body">
+
+						</div>
+						</li>
+					</ul>
+
+					<ul class="collapsible">
+						<li>
+						<div class="collapsible-header card-title" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem;">Einschulungen & Aenderungen <i class="material-icons">expand_more</i></div>
+						<div id ="notes" class="collapsible-body">
+
+						</div>
+						</li>
+					</ul>
+
+					<ul class="collapsible">
+						<li>
+						<div class="collapsible-header card-title" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem;">Sonstiges <i class="material-icons">expand_more</i></div>
+						<div id ="notes" class="collapsible-body">
+
+						</div>
+						</li>
+					</ul>
 				</div>
 			</div>
 		</div>
@@ -46,38 +76,36 @@ $welcomeText = $data['welcomeText'];
     </div>
 </div>
 <div class="col l6 s12 m6">
-    <div class="card white ">
-        <div class="card-content">
-            <span class="card-title">Demnächst</span>
-            <?php
-            if (isset($data["upcomingEvents"]) && count($data["upcomingEvents"]) > 0) {
-				foreach ($data["upcomingEvents"] as $t) {
-					
-					
-					?>
-					<span><br><b><a class="teal-text"><?php echo $t->typ; ?></b></a><a class="teal-text">
-				<?php echo $t->sweekday . " " . $t->sday;
-				if (isset($t->stime)) {
-					echo ' (' . $t->stime . ')';
-				}
-				if (isset($t->eday)) {
-					echo "-";
-				}
-				echo " " . $t->eweekday . " " . $t->eday;
-				if (isset($t->etime)) {
-					echo ' (' . $t->etime . ')';
-				}
-				
-				?>
-				</a>
-				</span>
-					<?php
-					
-				}
+<div class="card white">
+	<div class="card-content">
+		<span class="card-title">Demnächst</span>
+		<?php
+		if (isset($data["upcomingEvents"]) && count($data["upcomingEvents"]) > 0) {
+			$brPrevent = false;
+			foreach ($data["upcomingEvents"] as $t) {
+			?>
+				<span><?php if ($brPrevent === true) {?> <br> <?php }?><b><a class="teal-text"><?php echo $t->typ; ?></b></a><a class="teal-text">
+			<?php echo $t->sweekday . " " . $t->sday;
+			if (isset($t->stime)) {
+				echo ' (' . $t->stime . ')';
 			}
-            ?>
-        </div>
-    </div>
+			if (isset($t->eday)) {
+				echo "-";
+			}
+			echo " " . $t->eweekday . " " . $t->eday;
+			if (isset($t->etime)) {
+				echo ' (' . $t->etime . ')';
+			}
+			?>
+			</a>
+			</span>
+				<?php
+				$brPrevent = true;
+			}
+		}
+		?>
+	</div>
+</div>
 </div>
 </div>
 <div class="row">

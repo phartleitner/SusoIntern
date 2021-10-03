@@ -2,7 +2,7 @@
 $data = $this->getDataForView();
 
 $selectionActive = $est =  $events = $news = $editData = $childSel = true;
-$vplan = true;
+//$vplan = true;
 $blog = false; //module needs to be written from scratch
 
 $userObj = Controller::getUser();
@@ -78,10 +78,11 @@ if ($userObj instanceof Guardian) {
         array_push($modules, array("id" => "editdata", "href" => "?type=student_editdata", "title" => "Account bearbeiten", "icon" => "settings"));
     }
 }
-
+/*
 if ($vplan) {
     array_push($modules, array("id" => "vplan", "href" => "?type=vplan", "title" => "Vertretungsplan", "icon" => "dashboard"));
 }
+*/
 if ($events) {
     array_push($modules, array("id" => "events", "href" => "?type=events", "title" => "Termine", "icon" => "today"));
 }

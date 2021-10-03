@@ -30,44 +30,22 @@ $welcomeText = "Sie müssen zunächst Ihre Kinder registrieren, bevor Sie die An
 		<div class="col s12 ">
 			<div class="card white">
 				<div class="card-content">
-					<div class="card-title" style="margin-bottom: 20px;">Informationen</div>
-
-					<!--
-						<span class="card-title">aktuelle Hinweise
-							<a class="btn-flat teal-text " onClick="showNotice();"><i id="button" class="material-icons">expand_more</i></a> 
-						</span>
-						
-						
-						<div id="notice" style="display: none;">
-						<?php echo $welcomeText; ?>
-						</div>
-					-->
-					<ul class="collapsible">
-						<li>
-						<div class="collapsible-header card-title" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem;">Aktuelles zu Corona & Fernlernen <i class="material-icons">expand_more</i></div>
-						<div id ="notes" class="collapsible-body">
-
-						</div>
-						</li>
-					</ul>
-
-					<ul class="collapsible">
-						<li>
-						<div class="collapsible-header card-title" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem;">Einschulungen & Aenderungen <i class="material-icons">expand_more</i></div>
-						<div id ="notes" class="collapsible-body">
-
-						</div>
-						</li>
-					</ul>
-
-					<ul class="collapsible">
-						<li>
-						<div class="collapsible-header card-title" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem;">Sonstiges <i class="material-icons">expand_more</i></div>
-						<div id ="notes" class="collapsible-body">
-
-						</div>
-						</li>
-					</ul>
+				<!--
+					<span class="card-title">aktuelle Hinweise
+						<a class="btn-flat teal-text " onClick="showNotice();"><i id="button" class="material-icons">expand_more</i></a> 
+					</span>
+					 
+					
+					<div id="notice" style="display: none;">
+					<?php echo $welcomeText; ?>
+					</div>
+				-->
+				<ul class="collapsible">
+				<li>
+				  <div class="collapsible-header card-title">aktuelle Hinweise</div>
+				  <div id ="notes" class="collapsible-body"></div>
+				</li>
+				</ul>
 				</div>
 			</div>
 		</div>
@@ -81,10 +59,9 @@ $welcomeText = "Sie müssen zunächst Ihre Kinder registrieren, bevor Sie die An
 					<span class="card-title">Demnächst</span>
 					<?php
 					if (isset($data["upcomingEvents"]) && count($data["upcomingEvents"]) > 0) {
-						$brPrevent = false;
 						foreach ($data["upcomingEvents"] as $t) {
 						?>
-							<span><?php if ($brPrevent === true) {?> <br> <?php }?><b><a class="teal-text"><?php echo $t->typ; ?></b></a><a class="teal-text">
+							<span><br><b><a class="teal-text"><?php echo $t->typ; ?></b></a><a class="teal-text">
 						<?php echo $t->sweekday . " " . $t->sday;
 						if (isset($t->stime)) {
 							echo ' (' . $t->stime . ')';
@@ -100,7 +77,7 @@ $welcomeText = "Sie müssen zunächst Ihre Kinder registrieren, bevor Sie die An
 						</a>
 						</span>
 							<?php
-							$brPrevent = true;
+							
 						}
 					}
 					?>
@@ -113,8 +90,8 @@ $welcomeText = "Sie müssen zunächst Ihre Kinder registrieren, bevor Sie die An
 		<div class="col l6 s12 m6">
 			
 			<div class="card white ">
+				<span class="card-title">Ihre Kinder</span>
 				<div class="card-content">
-					<span class="card-title" style="margin-bottom: 15px;">Ihre Kinder</span>
 					<ul class="collapsible" id="childrenlist"></ul>	
 				</div>
 			</div>

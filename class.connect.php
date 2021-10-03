@@ -41,7 +41,10 @@ class Connection
     private function getCredentials()
     {
         include("class.debug.php");
-        $this->iniParams = json_decode(file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/intern/credentials.json"), true);
+		$this->iniParams = array("server" => "localhost","user" => "root", "pass" => "", "db" => "susointern",
+		"ldap" => "https://intranet.suso.schulen.konstanz.de/gpuntis/susointern.php", 
+		"download" => "download", "icsfile" => "SusoTermine","filebase"=>"..//");
+		
     }
 
     /**
@@ -64,7 +67,6 @@ class Connection
         $reporting = error_reporting(0);
 
         $params = $this->getIniParams();
-        
 
         $mysqli = $this->connID = new \mysqli($params['server'], $params['user'], $params['pass'], $params['db']);
         error_reporting($reporting);
@@ -75,7 +77,7 @@ class Connection
             exit();
         }
 
-        
+       
         mysqli_set_charset($mysqli, 'utf8');
     }
 

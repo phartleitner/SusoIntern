@@ -2,10 +2,11 @@
 $data = $this->getDataForView();
 
 $selectionActive = $est =  $events = $news = $editData = $childSel = true;
-$vplan = false;
+$vplan = true;
 $blog = false; //module needs to be written from scratch
 
 $userObj = Controller::getUser();
+
 
 if ($userObj == null) {
     
@@ -52,6 +53,7 @@ if (isset($data['modules'])) {
 $modules = array();
 
 array_push($modules, array("id" => "home", "href" => ".", "title" => "Home", "icon" => "home", "inner" => "<font style='font-size: 24px;'>Suso-Intern</font>"));
+
 
 
 if ($userObj instanceof Guardian) {

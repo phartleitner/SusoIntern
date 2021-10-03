@@ -1794,8 +1794,9 @@ class Model {
 			AND aktiv=true
 			AND datum='$datum'
 			AND vp_vpdata.klassen LIKE '%" . self::$connection->escape_string($student->getClass()) . "%'
-			ORDER BY datum,stunde ASC");
-            if (count($data) > 0) {
+            ORDER BY datum,stunde ASC");
+            
+            if (!empty($data)) {
                 foreach ($data as $d) {
                     $coverLesson = new CoverLesson();
                     $coverLesson->constructFromDB($d);
@@ -1803,6 +1804,8 @@ class Model {
                     unset($coverLesson);
                 }
             }
+            
+            
             unset($data);
         }
         

@@ -59,6 +59,7 @@ class Controller {
 	protected function readSession(){
 	$msg="";
 	if(!empty($_SESSION) ){
+        
 		$msg = "SESSION:\r\n";
 		foreach ($_SESSION as $key => $value){
 			if ($key != "notifications") {
@@ -86,7 +87,6 @@ class Controller {
 	protected function chooseLogicHandler(){
 	//choose the logic handler for admin and other users
 		if (isset($_SESSION['user']) ) {
-			   
 			   if ($_SESSION['user']['type'] == 0){
 					//admin is logged in
 					if (!$this->checkLoginTimeout()) {
@@ -135,7 +135,7 @@ class Controller {
 			}
 		//=========end of javascript timeout check=======
         
-		       
+		     
        
         
         if (!isset($this->input['type']))
@@ -165,16 +165,17 @@ class Controller {
         //all other cases
 		$this->sendOptions();
 		if (isset(self::$user)) {
+            
 			if (self::$user instanceof Guardian) {
 				//$this->infoToView['welcomeText'] = str_replace("\\n", "<br>", str_replace("\\r\\n", "<br>", $this->getOption('welcomeparent', '')));
 				$this->infoToView['welcomeText'] = $this->getEmptyIfNotExistent($this->model->getOptions(), 'welcomeparent');
 				$this->infoToView['children'] = self::$user->getChildren();
 				$this->infoToView['dsgvo'] = self::$user->getDsgvo(self::$user);
 			} else if (self::$user instanceof Teacher) {
-				$this->infoToView['welcomeText'] = $this->getEmptyIfNotExistent($this->model->getOptions(), 'welcometeacher');
+                $this->infoToView['welcomeText'] = $this->getEmptyIfNotExistent($this->model->getOptions(), 'welcometeacher');
 				$this->infoToView['dsgvo'] = self::$user->getDsgvo(self::$user);
 			} else if (self::$user instanceof StudentUser) {
-				$this->infoToView['welcomeText'] = $this->getEmptyIfNotExistent($this->model->getOptions(), 'welcomestudent');
+                $this->infoToView['welcomeText'] = $this->getEmptyIfNotExistent($this->model->getOptions(), 'welcomestudent');
 				$this->infoToView['dsgvo'] = self::$user->getDsgvo(self::$user);
 			}
 		}
@@ -1039,7 +1040,12 @@ class Controller {
      */
     protected function login() {
         
-		$input = $this->input;
+        $input = $this->input;
+        
+
+       
+
+
         if (!isset($input['login']['mail']) || !isset($input['login']['password'])) {
             $this->notify('Keine Email-Addresse oder Passwort angegeben');
             return "login";
@@ -1047,9 +1053,31 @@ class Controller {
         
         $pwd = $input['login']['password'];
         $mail = $input['login']['mail'];
+
+        
        
         
-        if (isset($input['console'])){  
+        if (isset($input['console'])){ 
+            
+            //Make Use of TestUsers for students and teachers
+            //must be deleted in productive use
+            if ($mail=="test@student") {
+                $_SESSION['user']['logintime'] = date('Y-m-d H:i');
+                $_SESSION['user']['type'] = 3;
+                $_SESSION['user']['isStudent'] = true;
+                $_SESSION['user']['id'] = 10411;
+                die(json_encode(array("success"=>true,"session"=>$_SESSION) ));
+                
+    
+            } else if ($mail=="test@teacher") {
+                $_SESSION['user']['logintime'] = date('Y-m-d H:i');
+                $_SESSION['user']['type'] = 2;
+                $_SESSION['user']['isTeacher'] = true;
+                $_SESSION['user']['id'] = 167;
+               die(json_encode(array("success"=>true,"session"=>$_SESSION) ));
+            }
+            //END of testuser routine
+
 		
 		//used to only get raw login state -> can be used in js
             $response = array();

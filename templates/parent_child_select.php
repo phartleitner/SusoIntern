@@ -36,22 +36,24 @@ include("header.php");
             <div class="row">
                 <ul class="collection col s12">
                     <?php foreach ($students as $child) { ?>
-                        <li class="collection-item">
-                            <?php echo $child->getSurname() . ", " . $child->getName() . " (Klasse " . $child->getClass() . ")"; ?>
+                        <li class="collection-item" style="display: flex; justify-content: left; align-items: center;">
+                        <span title="Einverständniserklärungen bearbeiten" class="material-icons" style="color: #009688; cursor: pointer; margin-right: 20px;" onclick="window.location='/client/#children'">settings</span>                            
+                            <div>
+                                <?php echo $child->getSurname() . ", " . $child->getName() . " (Klasse " . $child->getClass() . ")"; ?>
+                            </div>
                         </li>
                     <?php } ?>
                 </ul>
                 <?php } ?>
-            <span style="font-size=10px;">Sie benötigen zur Registrierung weiterer Kinder einen Registrierungsschlüssel! <br><a href="#requirekey" class="teal-text text-darken-2">Ich habe keinen Registrierungsschüssel oder kenne das nicht!</a></span>
+            <span style="font-size: 0.8em; margin-left: 5px;">Sie benötigen zur Registrierung weiterer Kinder einen Registrierungsschlüssel! <br><a href="#requirekey" class="teal-text text-darken-2" style="font-size: 1em; margin-left: 5px;">Ich habe keinen Registrierungsschüssel oder kenne das nicht!</a></span>
             
             </div>
         </div>
-        <div class="card-action center">
-            &copy; <?php echo date("Y"); ?> Heinrich-Suso-Gymnasium Konstanz
-        </div>
+        <?php echo $utility->get("copyright"); ?>
     </div>
 
 </div>
+
 <div id="addstudent" class="modal">
     <div class="modal-content">
         <h4>Schüler hinzufügen</h4>
@@ -95,7 +97,6 @@ include("header.php");
     </div>
 </div>
 
-
 <div id="student_blueprint" style="display:none;">
     <div class="input-field col l12 m12 s12">
         <input id="id" name="id" type="text" class="validate">
@@ -105,6 +106,10 @@ include("header.php");
 </div>
 
 <?php include("js.php"); ?>
+
+
+<div id="consentModals"></div>
+<script><?php include('parent_consent.js'); ?></script>
 
 <script type="application/javascript">
     function submitStudentForm() {

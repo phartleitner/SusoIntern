@@ -24,11 +24,7 @@ include("header.php");
                 </form>
             </div>
         </div>
-        <div class="card-action center">
-            <div class="divider"></div>
-            <br/>
-            &copy; <?php echo date("Y"); ?> Heinrich-Suso-Gymnasium Konstanz
-        </div>
+        <?php echo $utility->get("copyright-divider"); ?>
     </div>
 
 </div>

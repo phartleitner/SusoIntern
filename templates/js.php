@@ -44,7 +44,6 @@
             close: 'Ok',
             firstDay: 1,
             container: 'body'
-
         });
     }
 

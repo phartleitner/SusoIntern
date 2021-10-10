@@ -95,6 +95,8 @@
             </a>
         </li>
     </ul>
+
+    <br><br>
 	
 <?php 
 if(!isset($data['public_access']) ) {

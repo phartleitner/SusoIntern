@@ -123,7 +123,6 @@ class Model {
      * @return User | Teacher | Admin | Guardian
      */
     public function getUserById($uid,$data = null) {
-        
         if ($data == null)
             $data = self::$connection->selectAssociativeValues("SELECT * FROM user WHERE id=$uid");
         if ($data == null)
@@ -145,8 +144,19 @@ class Model {
                 return null;
                 break;
         }
-        
     }
+
+
+    public function userExistsById ($uid) {
+        $query = 'SELECT * FROM user WHERE id=?';
+        $stmt = self::$connection->getConnection()->prepare($query);
+        $stmt->bind_param("i", $uid);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+        return ($result->num_rows > 0);
+    }
+
     
     /**
      * @param string $email the user email
@@ -282,7 +292,21 @@ class Model {
         
         $data = $data[0];
         
-        return new Student($data['id'], $data['klasse'], $data['name'], $data['vorname'], $data['gebdatum'], $data['eid'], $data['eid2']);
+        return new Student($data['id'], $data['klasse'], $data['name'], $data['vorname'], $data['gebdatum'], $data['eid'], $data['eid2'], $data['zustimmungen']);
+    }
+
+
+
+    public function studentExistsById ($studentId) {
+        $query = 'SELECT * FROM schueler WHERE id=?;';
+        $stmt = self::$connection->getConnection()->prepare($query);
+        $stmt->bind_param("i", $studentId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+        $exists = ($result->num_rows > 0);
+
+        return $exists;
     }
 
     /**
@@ -730,10 +754,30 @@ class Model {
         //return new Guardian($data['uid'],$data['email'],$eid,$data['name'],$data['vorname']);
 		return array("fullname"=>$data['name'].", ".$data['vorname'],"email"=>$data['email'] );
 	}
+
+
+    /**
+	* getParentUserByParentId - not sure if above function is working properly
+	* @param int eid
+	* @return array
+	*/
+	public function getParentUserObjByParentId($eid){
+        $data = self::$connection->selectAssociativeValues("SELECT name, vorname, user.email AS email, user.id AS uid 
+        FROM eltern, user 
+        WHERE eltern.id=$eid
+        AND user.id = eltern.userid");
+            if ($data == null)
+                return null;
+            $data = $data[0];
+            
+        return new Guardian($data['uid'],$data['email'],$eid,$data['name'],$data['vorname']);
+    }
+
+
 	/**
 	* getParentByEmailAdress
 	* @param String email
-	* @return Guardian
+	* @return Guardian|Teacher|Admin
 	*/
 	public function getUserByEmail($email){
 	$data = self::$connection->selectAssociativeValues("SELECT id FROM user WHERE email='$email'");
@@ -3357,6 +3401,673 @@ class Model {
         $write = '[ '.date('Y-m-d H:i:s')." ] *** [action: ".$line."]\r\n";
         fputs($fh,$write);
         fclose($fh);
+    }
+
+
+
+
+
+
+
+    /**
+     * @param int studentId
+     * @return string[] Returns consents
+     */
+    public function getStudentConsents ($studentId) {
+        if ($this->getStudentById($studentId)->getConsent() === NULL || $this->getStudentById($studentId)->getConsent() == '') {
+            return array();
+        }
+        return $this->getStudentById($studentId)->getConsent();
+    }
+
+
+    /**
+     * Sets students consents
+     *  @param int $studentId
+     *  @param string $consents
+     */
+    private function setStudentConsents ($studentId, $consents) {
+        $query = "UPDATE schueler SET schueler.zustimmungen=? WHERE schueler.id=?;";
+        $stmt = self::$connection->getConnection()->prepare($query);
+        $stmt->bind_param("si", $consents, $studentId);
+        $stmt->execute();
+        $stmt->close();
+        return true;
+    }
+
+
+    /**
+     * @param int $studentId
+     * @param string $consent
+     */
+    public function toggleStudentConsent ($studentId, $consent) {
+        $consents = $this->getStudentConsents($studentId);
+        if (in_array($consent, $consents)) {
+            $index = array_search($consent, $consents);
+            array_splice($consents, $index, 1);
+            $this->setStudentConsents($studentId, json_encode($consents));
+            return false;
+        } else {
+            array_push($consents, $consent);
+            $this->setStudentConsents($studentId, json_encode($consents));
+            return true;
+        }
+    }
+
+
+
+
+
+    public function getConsentOptions ($studentId)
+    {
+        $query = "SELECT * FROM zustimmungen WHERE (betreff LIKE ?) OR (betreff LIKE ?)";
+
+        $stmt = self::$connection->getConnection()->prepare($query);
+        $betreff = '%' . $this->getStudentById($studentId)->getClass() . '%';
+        $all = '%All%';
+        
+        $stmt->bind_param("ss", $betreff, $all);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+        $return = array();
+
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                array_push($return, $row);
+            }
+        }
+
+        return $return;
+    }
+
+
+
+    public function getConsentOptionNames ($studentId) {
+        $query = "SELECT identifier FROM `zustimmungen` WHERE (betreff LIKE ?) OR (betreff LIKE ?)";
+
+        $stmt = self::$connection->getConnection()->prepare($query);
+        $betreff = '%' . $this->getStudentById($studentId)->getClass() . '%';
+        $all = '%All%';
+        
+        $stmt->bind_param("ss", $betreff, $all);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+        $return = array();
+
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                array_push($return, $row["identifier"]);
+            }
+        }
+
+
+        return $return;
+    }
+
+
+
+
+
+
+
+
+    public function getSettings ($id)
+    {
+        $this->settingEntryMakeExist($id);
+
+
+        $query = "SELECT * FROM settings WHERE settings.id=?";
+
+        $stmt = self::$connection->getConnection()->prepare($query);
+        
+        $stmt->bind_param("s", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                return $row;
+            }
+        } else {
+            return false;
+        }
+    }
+
+
+
+    public function setSetting ($id, $setting, $value) 
+    {
+        if (!in_array($setting, array("profilePublicVisible", "mailPublicVisible", "profileMessageable"))) {
+            return false;
+        }
+
+        $this->settingEntryMakeExist($id);
+
+        switch ($value) {
+            case "true":
+                $value = 1;
+                break;
+            case "false":
+                $value = 0;
+                break;
+        }
+
+        $query = "UPDATE settings SET " . $setting . "=? WHERE settings.id=?;";
+        $stmt = self::$connection->getConnection()->prepare($query);
+        $stmt->bind_param("is", $value, $id);
+        $stmt->execute();
+        $stmt->close();
+        return true;
+    }
+
+
+
+    private function settingEntryExists ($id) {
+        $query = "SELECT * FROM settings WHERE settings.id=?";
+
+        $stmt = self::$connection->getConnection()->prepare($query);
+        
+        $stmt->bind_param("s", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+
+        if ($result->num_rows > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    private function settingEntryMakeExist ($id) {
+        if ($this->settingEntryExists($id)) {
+            return true;
+        } else {
+            $query = 'INSERT INTO settings (id) VALUES (?)';
+
+            $stmt = self::$connection->getConnection()->prepare($query);
+        
+            $stmt->bind_param("s", $id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $stmt->close();
+            return true;
+        }
+    }
+
+
+
+
+
+
+    public function get_roomIds ($identifier) 
+    {   
+        $query = "SELECT * FROM rooms WHERE rooms.members LIKE ?";
+
+        $stmt = self::$connection->getConnection()->prepare($query);
+        
+        $memberstring = '%' . $identifier . '%';
+
+        $stmt->bind_param("s", $memberstring);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+
+        $return = [];
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                array_push($return, $row["id"]);
+            }
+        } else {
+            return false;
+        }
+
+        return $return;
+    }
+
+
+    public function getRoomById ($id) {
+        $query = "SELECT * FROM rooms WHERE rooms.id=?";
+
+        $stmt = self::$connection->getConnection()->prepare($query);
+        
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                return $row;
+            }
+        } else {
+            return false;
+        }
+    }
+
+
+
+
+    public function get_rooms ($identifier)
+    {
+        $return = [];
+        foreach($this->get_roomIds($identifier) as $key => $value) {
+            array_push($return, $this->getRoomById(($value)));
+        }
+        return $return;
+    }
+
+
+
+    public function getMessagesByRoomId ($id) {
+        $query = "SELECT * FROM messages WHERE roomId=?";
+
+        $stmt = self::$connection->getConnection()->prepare($query);
+
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+
+        $return = [];
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                if (strpos($row["userId"], "Guardian") !== false) {
+                    $row["author"] = $this->getUserById(str_replace("Guardian:", "", $row["userId"]))->getName() . $this->getUserById(str_replace("Guardian:", "", $row["userId"]))->getSurname();
+                } else if (strpos($row["userId"], "Teacher") !== false) {
+                    $row["author"] = $this->getUserById(str_replace("Teacher:", "", $row["userId"]))->getName() . $this->getUserById(str_replace("Teacher:", "", $row["userId"]))->getSurname();
+                } else if (strpos($row["userId"], "Admin") !== false) {
+                    $row["author"] = $this->getUserById(str_replace("Admin:", "", $row["userId"]))->getName() . $this->getUserById(str_replace("Admin:", "", $row["userId"]))->getSurname();
+                } else if (strpos($row["userId"], "Student") !== false) {
+                    $row["author"] = $this->getStudentById(str_replace("Student:", "", $row["userId"]))->getName() . $this->getStudentById(str_replace("Student:", "", $row["userId"]))->getSurname();
+                }
+                array_push($return, $row);
+            }
+        } else {
+            return false;
+        }
+        
+        return $return;
+    }
+
+
+
+
+    public function sendMessage ($roomId, $userId, $text) {
+        $query = 'INSERT INTO messages (roomId, userId, text, sent) VALUES (?, ?, ?, ?)';
+
+        $stmt = self::$connection->getConnection()->prepare($query);
+        $created = time();
+        $stmt->bind_param("issi", $roomId, $userId, $text, $created);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+        return true;
+    }
+
+
+    /**
+     * @param string $code Settings Identifier
+     * @return array()
+     */
+
+    public function parseUserSettingId ($code) {
+        if (strpos($code, "Guardian") !== false) {
+            $name = "Guardian";
+        } else if (strpos($code, "Teacher") !== false) {
+            $name = "Teacher";
+        } else if (strpos($code, "Admin") !== false) {
+            $name = "Admin";
+        } else if (strpos($code, "Student") !== false) {
+            $name = "Student";
+        } else {
+            return false;
+        }
+
+        $id = intval(str_replace($name . ":", "", $code));
+
+        return array("code" => $code, "id" => $id, "name" => $name);
+    }
+
+
+    /**
+     * @param string $code User Settings Identifier
+     */
+
+    public function userSettingsIdExists ($code) {
+        if (in_array($this->parseUserSettingId($code)["name"], array("Guardian", "Admin", "Teacher"))) {
+            if ($this->userExistsById($this->parseUserSettingId($code)["id"])) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if ($this->parseUserSettingId($code)["name"] === "Student") {
+            if ($this->studentExistsById($this->parseUserSettingId($code)["id"])) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+
+
+    public function getUserBySettingId ($code) {
+        if (!$this->userSettingsIdExists($code)) {
+            return false;
+        }
+
+        $name = $this->parseUserSettingId($code)["name"];
+        $id = $this->parseUserSettingId($code)["id"];
+
+        if ($name !== "Student") {
+            $ruser = $this->getUserById($id);
+            if ($ruser === NULL) {
+                return false;
+            } else if ($ruser->getClassType() !== $name) {
+                return false;
+            }
+        } else {
+            $ruser = $this->getStudentById($id);
+            if ($ruser === NULL) {
+                return false;
+            } else if ($ruser->getClassType() !== $name) {
+                return false;
+            }
+        }
+
+
+
+        if ($ruser->getClassType() === "Student") {
+            $row = array(
+                "name" => $ruser->getName(),
+                "surname" => $ruser->getSurname(),
+                "id" => $ruser->getId(),
+                "type" => $ruser->getClassType()
+            );
+        } else {
+            $row = array(
+                "name" => $ruser->getName(),
+                "surname" => $ruser->getSurname(),
+                "id" => $ruser->getId(),
+                "email" => $ruser->getEmail(),
+                "type" => $ruser->getClassType()
+            );
+        }
+
+
+        return $row;
+    }
+
+
+
+
+    public function isAdminOfRoom ($roomId, $userId) {
+        $rooms = $this->get_rooms($userId);
+
+        foreach($rooms as $key => $value) {
+            if (in_array($userId, json_decode($value["admins"]))) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+
+
+
+
+    public function kickMemberFromRoom ($memberCode, $roomId) {
+        $previous = $this->getRoomById($roomId);
+
+        $new = json_encode(array_diff(json_decode($previous["members"]), [$memberCode]));
+        
+        
+        $query = "UPDATE rooms SET members=? WHERE rooms.id=?;";
+        $stmt = self::$connection->getConnection()->prepare($query);
+        $stmt->bind_param("si", $new, $roomId);
+        $stmt->execute();
+        $stmt->close();
+    }
+
+
+
+
+    public function promoteDemoteMember ($memberCode, $roomId) {
+        $previous = $this->getRoomById($roomId);
+
+        $new = json_encode(array_values(array_diff(json_decode($previous["admins"]), [$memberCode])));
+        
+        $query = "UPDATE rooms SET admins=? WHERE rooms.id=?;";
+        $stmt = self::$connection->getConnection()->prepare($query);
+        $stmt->bind_param("si", $new, $roomId);
+        $stmt->execute();
+        $stmt->close();
+    }
+
+
+
+
+    public function sendRoomInvite ($roomId, $person) {
+        $userCode = $person;
+
+        if ($this->getUserBySettingId($person) === false) {
+            return false;
+        } else if (strpos($person, "@") !== false) {
+            $userCode = $this->getUserByEmail($person)->getClassType() . ":" . $this->getUserByEmail($person)->getId();
+        }
+
+
+        $previous = array_values(json_decode($this->getRoomById($roomId)["members"]));
+        if (!in_array($userCode, $previous)) {
+            array_push($previous, $userCode);
+            $new = json_encode($previous);
+            
+            
+            $query = "UPDATE rooms SET members=? WHERE rooms.id=?;";
+            $stmt = self::$connection->getConnection()->prepare($query);
+            $stmt->bind_param("si", $new, $roomId);
+            $stmt->execute();
+            $stmt->close();
+        }
+    }
+
+
+
+    public function getRoomIdByName ($name) {
+        $query = "SELECT * FROM rooms WHERE name=?";
+
+        $stmt = self::$connection->getConnection()->prepare($query);
+
+        $stmt->bind_param("s", $name);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+
+        $return = [];
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                return $row["id"];
+            }
+        } else {
+            return false;
+        }
+    }
+
+
+
+    public function createNewRoom ($name, $code) {
+        if ($this->getRoomIdByName($name) !== false) {
+            return false;
+        }
+
+
+        $query = 'INSERT INTO rooms (name, members, admins, created) VALUES (?, ?, ?, ?)';
+
+        $stmt = self::$connection->getConnection()->prepare($query);
+        $created = time();
+        $name = htmlspecialchars($name);
+        $members = json_encode(array($code));
+        $admins = json_encode(array($code));
+        $stmt->bind_param("sssi", $name, $members, $admins, $created);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+        
+
+
+        return true;
+    }
+
+
+
+
+    public function getDiscoverUsers ($code) {
+        $query = "SELECT * FROM settings WHERE profilePublicVisible=1";
+
+        $stmt = self::$connection->getConnection()->prepare($query);
+
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+
+        $return = [];
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $ruser = $this->getUserBySettingId($row["id"]);
+                $ruser["roomId"] = false;
+
+                foreach($this->get_rooms($code) as $room) {
+                    $people = array_values(json_decode($room["members"]));
+                    if (in_array($ruser["type"] . ":" . $ruser["id"], $people) && count($people) < 3) {
+                        $ruser["inChat"] = true;
+                        $ruser["roomId"] = $room["id"];
+                    }
+                }
+
+                
+                array_push($return, array("type" => "user", "userType" => $ruser["type"], "code" => $row["id"], "name" => $ruser["name"], "surname" => $ruser["surname"], "inChat" => $ruser["inChat"], "id" => $ruser["roomId"]));
+            }
+            return $return;
+        } else {
+            return false;
+        }
+    }
+
+
+
+
+    public function getDiscoverRooms ($code) {
+        $query = "SELECT * FROM rooms WHERE joinable=1";
+
+        $stmt = self::$connection->getConnection()->prepare($query);
+
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+
+
+        $return = [];
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $inChat = in_array($row["id"], array_values($this->get_roomIds($code)));
+
+                array_push($return, array("type" => "room", "id" => $row["id"], "name" => $row["name"], "created" => $row["created"], "inChat" => $inChat));
+            }
+            return $return;
+        } else {
+            return false;
+        }
+    }
+
+
+
+    public function getDiscover ($code) {
+        return array_merge($this->getDiscoverRooms($code), $this->getDiscoverUsers($code));
+    }
+
+
+
+
+    private function getSystemMessages () {
+        $query = "SELECT * FROM systemmessages;";
+
+        $stmt = self::$connection->getConnection()->prepare($query);
+
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+
+        $return = [];
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                array_push($return, $row);
+            }
+            return $return;
+        } else {
+            return false;
+        }
+    }
+
+
+    public function getSystemMessagesBySelector ($selector) {
+        $all = $this->getSystemMessages();
+        $return = [];
+
+        foreach($all as $message) {
+            $sel = json_decode($message["selector"], true);
+
+            if (
+                ($selector["grade"] === true || $sel["grade"] === true || in_array($selector["grade"], $sel["grade"])) &&
+                ($selector["class"] === true || $sel["class"] === true || in_array($selector["class"], $sel["class"])) &&
+                ($selector["type"] === true || $sel["type"] === true || in_array($selector["type"], $sel["type"]))
+                ) {
+                    $row = $message;
+                    $row["sent"] = $row["date"];
+
+                    if (strpos($row["userId"], "Guardian") !== false) {
+                        $row["author"] = $this->getUserById(str_replace("Guardian:", "", $row["userId"]))->getName() . $this->getUserById(str_replace("Guardian:", "", $row["userId"]))->getSurname();
+                    } else if (strpos($row["userId"], "Teacher") !== false) {
+                        $row["author"] = $this->getUserById(str_replace("Teacher:", "", $row["userId"]))->getName() . $this->getUserById(str_replace("Teacher:", "", $row["userId"]))->getSurname();
+                    } else if (strpos($row["userId"], "Admin") !== false) {
+                        $row["author"] = $this->getUserById(str_replace("Admin:", "", $row["userId"]))->getName() . $this->getUserById(str_replace("Admin:", "", $row["userId"]))->getSurname();
+                    } else if (strpos($row["userId"], "Student") !== false) {
+                        $row["author"] = $this->getStudentById(str_replace("Student:", "", $row["userId"]))->getName() . $this->getStudentById(str_replace("Student:", "", $row["userId"]))->getSurname();
+                    }
+
+                    array_push($return, $row);
+                continue;
+            }
+        }
+
+        return $return;
+    }
+
+
+
+
+    public function writeSystemMessage ($userId, $text, $grade, $class, $type, $priority) {
+        $selector = json_encode(["grade" => $grade, "class" => $class, "type" => $type]);
+
+        $date = time();
+
+        $query = 'INSERT INTO systemmessages (userId, date, selector, text, priority) VALUES (?, ?, ?, ?, ?)';
+
+        $stmt = self::$connection->getConnection()->prepare($query);
+        $created = time();
+        $stmt->bind_param("sissi", $userId, $date, $selector, $text, $priority);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+        
+        return true;
     }
 }
 

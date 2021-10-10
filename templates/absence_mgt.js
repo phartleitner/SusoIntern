@@ -177,6 +177,7 @@ studentList = [];
 for(x=0;x<jsonData.length;x++) {
 	studentList.push(jsonData[x]);		
 	}
+console.log(studentList)
 }
 
 /**
@@ -224,7 +225,7 @@ this.rowClone.style.display="block";
 	
 x++;
 });
-	
+
 }
 
 /**

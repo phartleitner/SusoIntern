@@ -199,6 +199,95 @@ class User  {
     public function getClassType() {
         return "User";
     }
+
+
+
+
+    public function getSettings () {
+        return Model::getInstance()->getSettings($this->getClassType() . ":" . $this->id);
+    }
+
+    public function setSetting ($setting, $value) {
+        return Model::getInstance()->setSetting($this->getClassType() . ":" . $this->id, $setting, $value);
+    }
+
+    public function get_rooms () {
+        return Model::getInstance()->get_rooms($this->getClassType() . ":" . $this->id);
+    }
+
+
+
+    public function get_room ($id) {
+        return Model::getInstance()->getMessagesByRoomId($id);
+    }
+
+
+    public function sendMessage ($roomId, $text) {
+        return Model::getInstance()->sendMessage($roomId, $this->getClassType() . ":" . $this->id, $text);
+    }
+
+
+
+    public function get_room_members ($roomId) {
+        $return = [];
+        for($i=0; $i<count($this->get_rooms()); $i++) {
+            $room = $this->get_rooms()[$i];
+
+            if (intval($room["id"]) !== intval($roomId)) {
+                continue;
+            }
+
+            foreach(json_decode($room["members"], true) as $key => $value) {
+                $user = Model::getInstance()->getUserBySettingId($value);
+                array_push($return, array("surname" => $user["surname"], "name" => $user["name"], "email" => $user["email"], "id" => $user["id"], "isAdmin" => Model::getInstance()->isAdminOfRoom($roomId, $value), "code" => $value));;
+            }
+        }
+        return $return;
+    }
+
+
+
+    public function isAdminOfRoom ($roomId) {
+        return Model::getInstance()->isAdminOfRoom($roomId, $this->getClassType() . ":" . $this->id);
+    }
+
+    public function kickMemberFromRoom ($memberCode, $roomId) {
+        return Model::getInstance()->kickMemberFromRoom($memberCode, $roomId);
+    }
+
+
+    public function promoteDemoteMember ($memberCode, $roomId) {
+        return Model::getInstance()->promoteDemoteMember($memberCode, $roomId);
+    }
+
+
+
+    public function sendRoomInvite ($room, $person) {
+        return Model::getInstance()->sendRoomInvite($room, $person);
+    }
+
+
+
+
+    public function createNewRoom ($name) {
+        return Model::getInstance()->createNewRoom($name, $this->getClassType() . ":" . $this->id);
+    }
+
+
+    public function getDiscover () {
+        return Model::getInstance()->getDiscover($this->getClassType() . ":" . $this->id);
+    }
+
+    
+    public function joinRoom ($roomId) {
+        return Model::getInstance()->sendRoomInvite($roomId, $this->getClassType() . ":" . $this->id);
+    }
+
+
+
+    public function getSystemMessages () {
+        return Model::getInstance()->getSystemMessagesBySelector(["grade" => "", "class" => "", "type" => $this->getClassType()]);
+    }
 }
 
 /**
@@ -409,7 +498,13 @@ class Guardian  extends User  {
     }
 	
 	
-	    
+	public function getSettings () {
+        return Model::getInstance()->getSettings($this->getClassType() . ":" . $this->id);
+    }
+
+    public function setSetting ($setting, $value) {
+        return Model::getInstance()->setSetting($this->getClassType() . ":" . $this->id, $setting, $value);
+    }
     
 }
 
@@ -701,6 +796,21 @@ class Teacher extends User {
     public function setVpInfoDate($datum) {
         $this->vpInfoDate = $datum;
     }
+
+
+
+    public function getSettings () {
+        return Model::getInstance()->getSettings($this->getClassType() . ":" . $this->id);
+    }
+
+    public function setSetting ($setting, $value) {
+        return Model::getInstance()->setSetting($this->getClassType() . ":" . $this->id, $setting, $value);
+    }
+
+
+    public function get_rooms () {
+        return Model::getInstance()->get_rooms($this->getClassType() . ":" . $this->id);
+    }
     
 }
 
@@ -734,15 +844,17 @@ class StudentUser extends User {
      * @param null|string $class
      * @param null|string $bday
      * @param int         $parent
+     * @param int         $parent2
      * @param string      $courses
      */
-    function __construct($id, $name, $surname, $class, $bday, $parent, $parent2,  $courses = null) {
+    function __construct($id, $name, $surname, $class, $bday, $parent, $parent2, $consent = null) {
         parent::__construct($id, 3, null, $name, $surname);
         //$this->id = $id;//entered 20181209 when trying to realise appLogin
 		$this->class = $class;
         $this->bday = $bday;
         $this->parent = $parent;
         $this->parent2 = $parent2;
+        $this->consent = $consent;
         //$this->courses = $courses;  -- 
 		$this->dsgvo = Model::getInstance()->getDsgvoStatus($this);
     }
@@ -773,6 +885,29 @@ class StudentUser extends User {
     public function getParent2() {
         return $this->parent2;
     }
+
+
+    /**
+     * @return int
+     */
+    public function getEid() {
+        return $this->parent;
+    }
+    /**
+     * @return int
+     */
+    public function getEid2() {
+        return $this->parent2;
+    }
+
+
+    public function getParentObj () {
+        return Model::getInstance()->getParentUserObjByParentId($this->getParent());
+    }
+
+    public function getParent2Obj () {
+        return Model::getInstance()->getParentUserObjByParentId($this->getParent2());
+    }
     
     /**
      * @return string
@@ -790,9 +925,40 @@ class StudentUser extends User {
      */
     public function getData() {
         
-        return array_merge(parent::getData(), array("class" => $this->class, "bday" => $this->bday, "eid" => $this->parent, "courses" => $this->getCourses()));
+        return array_merge(parent::getData(), array("class" => $this->class, "bday" => $this->bday, "eid" => $this->parent, "eid2" => $this->parent2, "courses" => $this->getCourses()));
     }
-    
+
+
+    /**
+     * @return string[]
+     */
+    public function getConsent () {
+        return $this->consent;
+    }
+
+
+    public function getConsentOptions () {
+        return Model::getInstance()->getConsentOptions($this->id);
+    }
+
+
+    public function getConsentOptionNames () {
+        return Model::getInstance()->getConsentOptionNames($this->id);
+    }
+
+
+
+    public function getSettings () {
+        return Model::getInstance()->getSettings($this->getClassType() . ":" . $this->id);
+    }
+
+    public function setSetting ($setting, $value) {
+        return Model::getInstance()->setSetting($this->getClassType() . ":" . $this->id, $setting, $value);
+    }
+
+    public function get_rooms () {
+        return Model::getInstance()->get_rooms($this->getClassType() . ":" . $this->id);
+    }
 }
 
 /**
@@ -831,8 +997,14 @@ class Student  {
      * @var array(String) student's courses
      */
     protected $courses;
+
+    /**
+     * @var string[] consents given by parents
+     */
+    protected $consent;
+
     
-    public function __construct($id, $class, $surname, $name, $bday, $eid = null,$eid2 = null) {
+    public function __construct($id, $class, $surname, $name, $bday, $eid = null,$eid2 = null, $consent = null) {
         $this->id = intval($id);
         $this->class = $class;
         $this->surname = $surname;
@@ -840,6 +1012,7 @@ class Student  {
         $this->bday = $bday;
         $this->eid = $eid;
         $this->eid2 = $eid2;
+        $this->consent = json_decode($consent, true);
     }
 	
 	
@@ -887,6 +1060,24 @@ class Student  {
     public function getEid2() {
         return $this->eid2;
     }
+
+
+    /**
+     * @return string[]
+     */
+    public function getConsent () {
+        return $this->consent;
+    }
+
+
+    public function getParentObj () {
+        return Model::getInstance()->getParentUserObjByParentId($this->getEid());
+    }
+
+    public function getParent2Obj () {
+        return Model::getInstance()->getParentUserObjByParentId($this->getEid2());
+    }
+
     
     public function getFullName() {
         return $this->getName() . " " . $this->getSurname();
@@ -957,11 +1148,117 @@ class Student  {
 	* @return string 
 	*/
 	public function getASVId() {
-			return Model::getInstance()->getASVId($this->id);
+		return Model::getInstance()->getASVId($this->id);
 	}
 	
-	
 
+
+	public function toggleConsent($consent) 
+    {
+        return Model::getInstance()->toggleStudentConsent($this->id, $consent);
+    }
+
+    public function getConsents() 
+    {
+        return Model::getInstance()->getStudentConsents($this->id);
+    }
+
+    public function getConsentOptions () {
+        return Model::getInstance()->getConsentOptions($this->id);
+    }
+
+
+    public function getConsentOptionNames () {
+        return Model::getInstance()->getConsentOptionNames($this->id);
+    }
+
+
+    public function getSettings () {
+        return Model::getInstance()->getSettings($this->getClassType() . ":" . $this->id);
+    }
+
+    public function setSetting ($setting, $value) {
+        return Model::getInstance()->setSetting($this->getClassType() . ":" . $this->id, $setting, $value);
+    }
+
+
+    public function get_rooms () {
+        return Model::getInstance()->get_rooms($this->getClassType() . ":" . $this->id);
+    }
+
+
+    public function get_room ($id) {
+        return Model::getInstance()->getMessagesByRoomId($id);
+    }
+
+
+
+    public function sendMessage ($roomId, $text) {
+        return Model::getInstance()->sendMessage($roomId, $this->getClassType() . ":" . $this->id, $text);
+    }
+
+
+
+    public function get_room_members ($roomId) {
+        $return = [];
+        for($i=0; $i<count($this->get_rooms()); $i++) {
+            $room = $this->get_rooms()[$i];
+
+            if (intval($room["id"]) !== intval($roomId)) {
+                continue;
+            }
+
+            foreach(json_decode($room["members"], true) as $key => $value) {
+                $user = Model::getInstance()->getUserBySettingId($value);
+                array_push($return, array("surname" => $user["surname"], "name" => $user["name"], "email" => $user["email"], "id" => $user["id"], "isAdmin" => Model::getInstance()->isAdminOfRoom($roomId, $value), "code" => $value));;
+            }
+        }
+        return $return;
+    }
+
+
+
+    public function isAdminOfRoom ($roomId) {
+        return Model::getInstance()->isAdminOfRoom($roomId, $this->getClassType() . ":" . $this->id);
+    }
+
+
+
+    public function kickMemberFromRoom ($memberCode, $roomId) {
+        return Model::getInstance()->kickMemberFromRoom($memberCode, $roomId);
+    }
+
+
+
+    public function promoteDemoteMember ($memberCode, $roomId) {
+        return Model::getInstance()->promoteDemoteMember($memberCode, $roomId);
+    }
+
+
+    public function sendRoomInvite ($room, $person) {
+        return Model::getInstance()->sendRoomInvite($room, $person);
+    }
+
+
+    public function createNewRoom ($name) {
+        return Model::getInstance()->createNewRoom($name, $this->getClassType() . ":" . $this->id);
+    }
+
+
+    public function getDiscover () {
+        return Model::getInstance()->getDiscover($this->getClassType() . ":" . $this->id);
+    }
+    
+
+    public function joinRoom ($roomId) {
+        return Model::getInstance()->sendRoomInvite($roomId, $this->getClassType() . ":" . $this->id);
+    }
+
+
+
+    public function getSystemMessages () {
+        return Model::getInstance()->getSystemMessagesBySelector(["grade" => "", "class" => "", "type" => $this->getClassType()]);
+    }
 }
 
 ?>

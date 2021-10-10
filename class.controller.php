@@ -49,6 +49,9 @@ class Controller {
         if ($this->model == null)
             $this->model = Model::getInstance();
         $this->input = $input;
+
+        
+
         $this->infoToView = array();
 		$this->chooseLogicHandler();
 	}
@@ -57,27 +60,26 @@ class Controller {
 	*debug function
 	*/
 	protected function readSession(){
-	$msg="";
-	if(!empty($_SESSION) ){
-        
-		$msg = "SESSION:\r\n";
-		foreach ($_SESSION as $key => $value){
-			if ($key != "notifications") {
-			$msg .= $key." -- ";
-			if (is_array($value) ) {
-				foreach ($value as $k=>$v) {
-						$msg .= "[".$k. " : ".$v."]\r\n";
-				}
-			} else {
-				$msg .= $value;
-			}
-			$msg .="\r\n";
-			}
-		}
-	} else {
-		$msg = "No Session set";
-	}
-	return $msg;
+        $msg="";
+        if(!empty($_SESSION) ){
+            $msg = "SESSION:\r\n";
+            foreach ($_SESSION as $key => $value){
+                if ($key != "notifications") {
+                $msg .= $key." -- ";
+                if (is_array($value) ) {
+                    foreach ($value as $k=>$v) {
+                            $msg .= "[".$k. " : ".$v."]\r\n";
+                    }
+                } else {
+                    $msg .= $value;
+                }
+                $msg .="\r\n";
+                }
+            }
+        } else {
+            $msg = "No Session set";
+        }
+        return $msg;
 	}
 	
 	/*
@@ -87,6 +89,7 @@ class Controller {
 	protected function chooseLogicHandler(){
 	//choose the logic handler for admin and other users
 		if (isset($_SESSION['user']) ) {
+			   
 			   if ($_SESSION['user']['type'] == 0){
 					//admin is logged in
 					if (!$this->checkLoginTimeout()) {
@@ -135,7 +138,7 @@ class Controller {
 			}
 		//=========end of javascript timeout check=======
         
-		     
+		       
        
         
         if (!isset($this->input['type']))
@@ -165,22 +168,35 @@ class Controller {
         //all other cases
 		$this->sendOptions();
 		if (isset(self::$user)) {
-            
 			if (self::$user instanceof Guardian) {
 				//$this->infoToView['welcomeText'] = str_replace("\\n", "<br>", str_replace("\\r\\n", "<br>", $this->getOption('welcomeparent', '')));
 				$this->infoToView['welcomeText'] = $this->getEmptyIfNotExistent($this->model->getOptions(), 'welcomeparent');
 				$this->infoToView['children'] = self::$user->getChildren();
 				$this->infoToView['dsgvo'] = self::$user->getDsgvo(self::$user);
 			} else if (self::$user instanceof Teacher) {
-                $this->infoToView['welcomeText'] = $this->getEmptyIfNotExistent($this->model->getOptions(), 'welcometeacher');
+				$this->infoToView['welcomeText'] = $this->getEmptyIfNotExistent($this->model->getOptions(), 'welcometeacher');
 				$this->infoToView['dsgvo'] = self::$user->getDsgvo(self::$user);
 			} else if (self::$user instanceof StudentUser) {
-                $this->infoToView['welcomeText'] = $this->getEmptyIfNotExistent($this->model->getOptions(), 'welcomestudent');
+				$this->infoToView['welcomeText'] = $this->getEmptyIfNotExistent($this->model->getOptions(), 'welcomestudent');
 				$this->infoToView['dsgvo'] = self::$user->getDsgvo(self::$user);
 			}
+
+
+            /**
+            * Set CSRF & other saefety stuff
+            */
+            $this->safety_functions();
 		}
-		if (self::$user != null || $this->input['type'] == "app" || $this->input['type'] == "public" || $this->input['type'] == "login" || $this->input['type'] == "register" || $this->input['type'] == "pwdreset" || isset($_SESSION['timeout']) || isset($_SESSION['logout'])  || $this->input['type'] == "confirm" || $this->input['type'] == "application") // those cases work without login
+		if (self::$user != null || $this->input['type'] == "app" || $this->input['type'] == "public" || $this->input['type'] == "login" || $this->input['type'] == "register" || $this->input['type'] == "pwdreset" || isset($_SESSION['timeout']) || isset($_SESSION['logout'])  || $this->input['type'] == "confirm" || $this->input['type'] == "application" || $this->input["type"] == "api") // those cases work without login
 		{
+
+        // Handle special case for API in order to allow easy parsing of API
+        if ($this->input["type"] == "api" && self::$user == null) {
+            include($_SERVER["DOCUMENT_ROOT"] . "/intern/class.api.php");
+            $api = new Api();
+            $api->throw("Permissionerror", "Not logged in!");
+        }
+
         switch ($this->input['type']) {
             case "application":
                 $this->handleApplication($this->input);
@@ -213,6 +229,17 @@ class Controller {
 				$this->infoToView['user'] = self::$user;
                 $template = "parent_child_select";
                 break;
+            case "consent":
+                if (self::$user == null)
+                    break;
+                if (!self::$user instanceof Guardian) {
+                    $this->notify("Sie müssen ein Elternteil sein, um auf diese Seite zugreifen zu können!");
+                    
+                    return $this->getDashBoardName();
+                }
+				$this->infoToView['user'] = self::$user;
+                $template = "parent_consent";
+                break;
             case "login":
                 $template = $this->login();
                 break;
@@ -234,6 +261,9 @@ class Controller {
 				break;
             case "parent_editdata":
                 $template = $this->handleParentEditData();
+                break;
+            case "information":
+                $template = $this->information();
                 break;
             case "teacher_editdata":
                 $template = $this->handleTeacherEditData();
@@ -401,6 +431,15 @@ class Controller {
 					die(json_encode($arr));
 				}
 				break;
+            case "api";
+                if (!isset($this->input["api"])) {
+                    exit("Requesterror");
+                } else {
+                    $GLOBALS["apiType"] = $this->input["api"];
+                    include($_SERVER["DOCUMENT_ROOT"] . "/intern/class.api.php");
+                    $template = $this->api();
+                }
+                break;
             default:
                 if(isset($_SESSION['user'] ) ) {
 					switch ($_SESSION['user']['type'] ) {
@@ -1040,12 +1079,7 @@ class Controller {
      */
     protected function login() {
         
-        $input = $this->input;
-        
-
-       
-
-
+		$input = $this->input;
         if (!isset($input['login']['mail']) || !isset($input['login']['password'])) {
             $this->notify('Keine Email-Addresse oder Passwort angegeben');
             return "login";
@@ -1053,31 +1087,9 @@ class Controller {
         
         $pwd = $input['login']['password'];
         $mail = $input['login']['mail'];
-
-        
        
         
-        if (isset($input['console'])){ 
-            
-            //Make Use of TestUsers for students and teachers
-            //must be deleted in productive use
-            if ($mail=="test@student") {
-                $_SESSION['user']['logintime'] = date('Y-m-d H:i');
-                $_SESSION['user']['type'] = 3;
-                $_SESSION['user']['isStudent'] = true;
-                $_SESSION['user']['id'] = 10411;
-                die(json_encode(array("success"=>true,"session"=>$_SESSION) ));
-                
-    
-            } else if ($mail=="test@teacher") {
-                $_SESSION['user']['logintime'] = date('Y-m-d H:i');
-                $_SESSION['user']['type'] = 2;
-                $_SESSION['user']['isTeacher'] = true;
-                $_SESSION['user']['id'] = 167;
-               die(json_encode(array("success"=>true,"session"=>$_SESSION) ));
-            }
-            //END of testuser routine
-
+        if (isset($input['console'])){  
 		
 		//used to only get raw login state -> can be used in js
             $response = array();
@@ -1097,6 +1109,28 @@ class Controller {
             return "login";
         } 
 		
+    }
+
+
+
+    /**
+     * Information / Attributions
+     * @return string returns template to be displayed
+     */
+    protected function information () { 
+        return "information";
+    }
+
+
+
+
+    /**
+     * API for new Platform
+     * @return string returns template to be displayed
+     */
+    protected function api ()
+    {
+        return "api";
     }
 	
 
@@ -1710,7 +1744,13 @@ class Controller {
     }
 
     
-  
+    
+    private function safety_functions () 
+    {
+        if (!isset($_SESSION["CSRF-token"])) {
+            $_SESSION["CSRF-token"] = bin2hex(random_bytes(28));
+        }
+    }
 
 
 
